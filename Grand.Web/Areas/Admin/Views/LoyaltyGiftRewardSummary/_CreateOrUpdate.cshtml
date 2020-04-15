@@ -1,0 +1,46 @@
+﻿@model Grand.Web.Areas.Admin.Models.LoyaltyGiftRewardSummary.LoyaltyGiftRewardSummaryModel
+
+@Html.ValidationSummary(false)
+@*@Html.HiddenFor(model => model.Id)*@
+<script>
+    $('body').addClass('page-sidebar-closed');
+    $('.page-sidebar-menu').addClass('page-sidebar-menu-closed');
+    var tabPos = 'left';
+    if (window.devicePixelRatio == 2)
+        tabPos = 'top';
+    $(document).ready(function () {
+        $('#service-edit').show();
+        $("#service-edit").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            tabPosition: tabPos,
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+<div id="service-edit" style="display:none">
+    <ul>
+        <li tab-index="0">
+            @T("Admin.Tags.Tags.Fields.Group_Name")
+        </li>
+    </ul>
+    <div>
+        <partial name="_CreateOrUpdate.TabInfo" model="Model" />
+    </div>
+</div>
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "service-edit");
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+@*save selected tab index*@
+<input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">
+
+

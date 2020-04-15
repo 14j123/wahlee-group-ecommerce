@@ -1,0 +1,53 @@
+﻿@using Grand.Web.Areas.Admin.Models.FlashSales;
+
+@model FlashSaleModel
+
+@inject IEventPublisher eventPublisher
+@using Grand.Framework.UI;
+@{
+    Html.AddScriptParts("~/scripts/jquery.tmpl.min.js", excludeFromBundle: true);
+}
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<script>
+    $(document).ready(function () {
+        $("#flashSale-edit").show();
+        $("#flashSale-edit").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+<div id="flashSale-edit" style="display:none">
+    <ul>
+        <li tab-index="0">
+            @T("Admin.Promotions.FlashSales.Info")
+        </li>
+        <li tab-index="1" id="tab-applied-to-products">
+            @T("Admin.Promotions.FlashSales.AppliedToProducts")
+        </li>
+    </ul>
+    <div>
+        <partial name="_CreateOrUpdate.TabInfo" model="Model" />
+    </div>
+  
+    <div>
+        <partial name="_CreateOrUpdate.TabAppliedToProducts" model="Model" />
+    </div>
+</div>
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "flashSale-edit");
+    eventPublisher.Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+@*save selected tab index*@
+<input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">

@@ -1,0 +1,59 @@
+﻿@using Grand.Web.Models.FlashSales;
+@using Grand.Services.Common;
+
+@model IList<FlashSaleModel>
+<div class="home-page-product-grid generalMarginSupporter">
+
+    @foreach (var item in Model)
+    {
+        <div class="text-md-center text-left generalMarginSupporter" id="flashSale-block-@(item.Id)">
+            <div class="row">
+
+                <div class="col-sm-5">
+                    <div class="flashTitleName">@item.Name</div>
+                </div>
+
+                <div class="col-sm-5">
+                    @if (item.StartTime.HasValue && item.EndTime.HasValue)
+                    {
+
+                        var startTime = item.StartTime.Value.ToLocalTime();
+                        var endTime = item.EndTime.Value.ToLocalTime();
+                        var currentDateTime = DateTime.UtcNow.ToLocalTime();
+
+                        <div style="display:inline-block;">
+
+                            @if ((currentDateTime >= startTime) && (currentDateTime <= endTime))
+                            {
+                                <label class="d-inline-block flashSaletimefmt">Time left: </label>
+                                <div class="d-inline-block flashSaletimefmt" data-countdown="@endTime.ToString("yyyy-MM-dd HH:mm")"></div>
+                            }
+
+                            else /*if((currentDateTime <= startTime) && (currentDateTime >= endTime))*/
+                            {
+                                <label class="d-inline-block flashSaletimefmt">Start In: </label>
+                                <div class="d-inline-block flashSaletimefmt" data-countdown="@startTime.ToString("yyyy-MM-dd HH:mm")"></div>
+                            }
+
+                        </div>
+
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row px-3">
+            @foreach (var product in item.FlashSaleProducts)
+            {
+                <div class="col-xl-3 col-lg-4 col-sm-6 col-6 product-container">
+                    <partial name="_ProductBoxFlashSale" model="product" />
+
+                </div>
+            }
+        </div>
+
+    }
+
+</div>

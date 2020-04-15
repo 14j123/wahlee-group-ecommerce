@@ -1,0 +1,291 @@
+﻿@model CustomerNavigationModel
+@section Styles {
+}
+
+<div id="block-account-navigation" class="block block-account-navigation">
+    <div class="usersectionparent">
+    <div class="userprofilecircle">
+        lovoe
+    </div>
+
+    <div class="memberbalancetitle">
+        Balance :
+    </div>
+
+    <div class="memberbalance">
+        RM120.00
+    </div>
+    </div>
+    @*MY Account tab*@
+    <div class="card card-filter">
+        <article class="card-group-item">
+            <header class="card-header">
+                <a href="#" aria-expanded="true" data-toggle="collapse" data-target="#collapseMyAccount">
+                    <i class="icon-action material-icons">expand_more</i>
+                    <div class="card-MyStyle">My Account</div>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapseMyAccount">
+                <div class="card-body card-body-MyStyle">
+                    <ul class="list-unstyled list-lg">
+                        @await Component.InvokeAsync("Widget", new { widgetZone = "account_navigation_before" })
+                        @if (!Model.HideInfo)
+                        {
+                            <li class="customer-info">
+                                <a href="@Url.RouteUrl("CustomerInfo")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Info)
+                                                                   {<text>active</text>}
+                                                                   else
+                                                                   {<text>inactive</text>}"><span>@T("Account.CustomerInfo")</span></a>
+                                                            </li>
+                                                        }
+                        @if (!Model.HideAddresses)
+                        {
+                            <li class="customer-addresses">
+                                <a href="@Url.RouteUrl("CustomerAddresses")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Addresses)
+                                                                        {<text>active</text>}
+                                                                        else
+                                                                        {<text>inactive</text>}"><span>@T("Account.CustomerAddresses")</span></a>
+                                                                    </li>
+                                                                }
+                        @if (!Model.HideOrders)
+                        {
+                            <li class="customer-orders">
+                                <a href="@Url.RouteUrl("CustomerOrders")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Orders)
+                                                                     {<text>active</text>}
+                                                                     else
+                                                                     {<text>inactive</text>}"><span>@T("Account.CustomerOrders")</span></a>
+                                                                </li>
+                                                            }
+                        @if (!Model.HideAuctions)
+                        {
+                            <li class="customer-auctions">
+                                <a href="@Url.RouteUrl("CustomerAuctions")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Auctions)
+                                                                     {<text>active</text>}
+                                                                     else
+                                                                     {<text>inactive</text>}"><span>@T("Account.CustomerAuctions")</span></a>
+                                                                </li>
+                                                            }
+                        @if (!Model.HideNotes)
+                        {
+                            <li class="customer-notes">
+                                <a href="@Url.RouteUrl("CustomerNotes")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Notes)
+                                                                    {<text>active</text>}
+                                                                             else
+                                                                             {<text>inactive</text>}"><span>@T("Account.CustomerNotes")</span></a>
+                                                                        </li>
+                                                                    }
+                        @if (!Model.HideReturnRequests)
+                        {
+                            <li class="customer-returns">
+                                <a href="@Url.RouteUrl("CustomerReturnRequests")" class="@if (Model.SelectedTab == CustomerNavigationEnum.ReturnRequests)
+                                                                             {<text>active</text>}
+                                                                             else
+                                                                             {<text>inactive</text>}"><span>@T("Account.CustomerReturnRequests")</span></a>
+                                                                        </li>
+                                                                    }
+                        @if (!Model.HideDownloadableProducts)
+                        {
+                            <li class="customer-downloadable">
+                                <a href="@Url.RouteUrl("CustomerDownloadableProducts")" class="@if (Model.SelectedTab == CustomerNavigationEnum.DownloadableProducts)
+                                                                                   {<text>active</text>}
+                                                                                   else
+                                                                                   {<text>inactive</text>}"><span>@T("Account.DownloadableProducts")</span></a>
+                                                                            </li>
+                                                                        }
+                        @if (!Model.HideBackInStockSubscriptions)
+                        {
+                            <li class="customer-back">
+                                <a href="@Url.RouteUrl("CustomerBackInStockSubscriptions")" class="@if (Model.SelectedTab == CustomerNavigationEnum.BackInStockSubscriptions)
+                                                                                   {<text>active</text>}
+                                                                                   else
+                                                                                   {<text>inactive</text>}"><span>@T("Account.BackInStockSubscriptions")</span></a>
+                                                                            </li>
+                                                                        }
+                        @*@if (!Model.HideRewardPoints)
+                        {
+                            <li class="reward-points">
+                                <a href="@Url.RouteUrl("CustomerRewardPoints")" class="@if (Model.SelectedTab == CustomerNavigationEnum.RewardPoints)
+                                                                           {<text>active</text>}
+                                                                           else
+                                                                           {<text>inactive</text>}"><span>@T("Account.RewardPoints")</span></a>
+                                                                    </li>
+                                                                }*@
+                        @if (!Model.HideChangePassword)
+                        {
+                            <li class="change-password">
+                                <a href="@Url.RouteUrl("CustomerChangePassword")" class="@if (Model.SelectedTab == CustomerNavigationEnum.ChangePassword)
+                                                                             {<text>active</text>}
+                                                                             else
+                                                                             {<text>inactive</text>}"><span>@T("Account.ChangePassword")</span></a>
+                                                                        </li>
+                                                                    }
+                        @if (!Model.HideDeleteAccount)
+                        {
+                            <li class="customer-delete">
+                                <a href="@Url.RouteUrl("CustomerDeleteAccount")" class="@if (Model.SelectedTab == CustomerNavigationEnum.DeleteAccount)
+                                                                             {<text>active</text>}
+                                                                             else
+                                                                             {<text>inactive</text>}"><span>@T("Account.DeleteAccount")</span></a>
+                                                                        </li>
+                                                                    }
+                        @if (!Model.HideAvatar)
+                        {
+                            <li class="customer-avatar">
+                                <a href="@Url.RouteUrl("CustomerAvatar")" class="@if (Model.SelectedTab == CustomerNavigationEnum.Avatar)
+                                                                     {<text>active</text>}
+                                                                     else
+                                                                     {<text>inactive</text>}"><span>@T("Account.Avatar")</span></a>
+                                                                </li>
+                                                            }
+                        @if (!Model.HideForumSubscriptions)
+                        {
+                            <li class="customer-forum">
+                                <a href="@Url.RouteUrl("CustomerForumSubscriptions")" class="@if (Model.SelectedTab == CustomerNavigationEnum.ForumSubscriptions)
+                                                                                 {<text>active</text>}
+                                                                                 else
+                                                                                 {<text>inactive</text>}"><span>@T("Account.ForumSubscriptions")</span></a>
+                                                                            </li>
+                                                                        }
+                        @if (Model.ShowVendorInfo)
+                        {
+                            <li class="customer-vendor">
+                                <a href="@Url.RouteUrl("CustomerVendorInfo")" class="@if(Model.SelectedTab == CustomerNavigationEnum.VendorInfo)
+                                                                     {<text>active</text>}
+                                                                     else
+                                                                     {<text>inactive</text>}"><span>@T("Account.VendorInfo")</span></a>
+                                                                </li>
+                                                            }
+                        @await Component.InvokeAsync("Widget", new { widgetZone = "account_navigation_after" })
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    @*MY Membership tab*@
+    <div class="card card-filter">
+        <article class="card-group-item">
+            <header class="card-header">
+                <a href="#" aria-expanded="false" data-toggle="collapse" data-target="#collapseMyMemberShip">
+                    <i class="icon-action material-icons">expand_more</i>
+                    <div class="card-MyStyle">My Membership</div>
+                </a>
+            </header>
+            <div class="filter-content collapse" id="collapseMyMemberShip">
+                <div class="card-body card-body-MyStyle">
+                    <ul class="list-unstyled list-lg">
+                        <li class="">
+                            <a href="#">e-wallet Info</a>
+                        </li>
+                        <li>
+                            <a href="#">Top Up History</a>
+                        </li>
+                        <li>
+                            <a href="#">Renewal</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    @*MY Rewards tab*@
+    <div class="card card-filter">
+        <article class="card-group-item">
+            <header class="card-header">
+                <a href="#" aria-expanded="false" data-toggle="collapse" data-target="#collapseMyRewards">
+                    <i class="icon-action material-icons">expand_more</i>
+                    <div class="card-MyStyle">My Rewards</div>
+                </a>
+            </header>
+            <div class="filter-content collapse" id="collapseMyRewards">
+                <div class="card-body card-body-MyStyle">
+                    <ul class="list-unstyled list-lg">
+                        <li class="">
+                            <a href="#">View Rewards</a>
+                        </li>
+                        <li>
+                            <a href="#">My Voucher</a>
+                        </li>
+                        <li>
+                            <a href="#">Points History</a>
+                        </li>
+                        <li>
+                            <a href="#">Birthday Treats</a>
+                        </li>
+                        <li>
+                            <a href="#">Login Rewards</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    @*Referral Rewards tab*@
+    <div class="card card-filter">
+        <article class="card-group-item">
+            <header class="card-header">
+                <a href="#" aria-expanded="false" data-toggle="collapse" data-target="#collapseMyReferralRewards">
+                    <i class="icon-action material-icons">expand_more</i>
+                    <div class="card-MyStyle">Referral Rewards</div>
+                </a>
+            </header>
+            <div class="filter-content collapse" id="collapseMyReferralRewards">
+                <div class="card-body card-body-MyStyle">
+                    <ul class="list-unstyled list-lg">
+                        <li class="">
+                            <a href="#">Refer A Freind/Family</a>
+                        </li>
+                        <li>
+                            <a href="#">Referral History</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    @*Settings tab*@
+    <div class="card card-filter">
+        <article class="card-group-item">
+            <header class="card-header">
+                <a href="#" aria-expanded="false" data-toggle="collapse" data-target="#collapseMySettings">
+                    <i class="icon-action material-icons">expand_more</i>
+                    <div class="card-MyStyle">Settings</div>
+                </a>
+            </header>
+            <div class="filter-content collapse" id="collapseMySettings">
+                <div class="card-body card-body-MyStyle">
+                    <ul class="list-unstyled list-lg">
+                        <li class="">
+                            <a href="#">Service &Aacute; Warranty Form</a>
+                        </li>
+                        <li>
+                            <a href="#">Store Location</a>
+                        </li>
+                        <li>
+                            <a href="#">Push Notifications</a>
+                        </li>
+                        <li>
+                            <a href="#">Term &amp; Conditions</a>
+                        </li>
+                        <li>
+                            <a href="#">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a href="#">Social Links Account</a>
+                        </li>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </div>
+
+</div>

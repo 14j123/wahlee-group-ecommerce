@@ -1,0 +1,53 @@
+﻿@using Grand.Core.Domain.FlashSales;
+@using Grand.Web.Areas.Admin.Models.FlashSales;
+
+@model FlashSaleModel
+
+@using Grand.Framework.UI;
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#tab-applied-to-products').show();
+
+        });
+
+   
+ 
+</script>
+<vc:admin-widget widget-zone="flashSale_details_info_top" additional-data="Model" />
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Name" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="StartDateUtc" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="StartDateUtc" />
+                <span asp-validation-for="StartDateUtc"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="EndDateUtc" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="EndDateUtc" />
+                <span asp-validation-for="EndDateUtc"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="IsEnabled" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="IsEnabled" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="IsEnabled"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<vc:admin-widget widget-zone="flashSale_details_info_bottom" additional-data="Model" />

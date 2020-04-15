@@ -1,0 +1,52 @@
+﻿@model Grand.Web.Areas.Admin.Models.PointSetting.PointSettingModel
+
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="RuleName" />
+            <div class="col-md-9 col-sm-9">
+                <label class="control-label">@Model.RuleName</label>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="RuleDescription" />
+            <div class="col-md-9 col-sm-9">
+                <label class="control-label">@Model.RuleDescription</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Times" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Times" />
+                <span asp-validation-for="Times"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Activate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Activate" />
+                <span asp-validation-for="Activate"></span>
+            </div>
+        </div>
+    </div>
+</div>
+

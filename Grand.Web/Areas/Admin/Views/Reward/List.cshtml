@@ -1,0 +1,196 @@
+﻿@{
+    //page title
+    ViewBag.Title = T("Loyal").Text;
+}
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light form-fit">
+                        <div class="form-body col-md-6 advanced-filter">
+                            <div class="form-group">
+                                @*<admin-label asp-for="SearchProductName" class="control-label col-md-4 col-sm-4" />*@
+                                <div class="col-md-8 col-sm-8">
+                                    @*<admin-input asp-for="SearchProductName" />*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-body col-md-6 advanced-filter">
+                            <div class="form-group">
+                                <div class="col-md-8 col-sm-8">
+                                    <div id="ExtendFilter">
+                                        <button class="btn btn-success filter-submit" id="search-products">
+                                            <i class="fa fa-search"></i> @T("Admin.Common.Search")
+                                        </button>
+                                        <button type="button" class="btn btn-default filter-extend-button">
+                                            <i class="fa fa-filter"></i> <span class="filter-text-close">@T("Admin.Common.Search.Filter.Open")</span>
+                                            <span class="filter-text-open">@T("Admin.Common.Search.Filter.Close")</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-users"></i>
+                    @T("Admin.Reward.Reward.Fields.EditGiftDetails")
+                </div>
+                <div class="actions">
+                    <a href="@Url.Action("Create")" class="btn green"><i class="fa fa-plus"></i><span class="hidden-xs"> @T("Admin.Common.AddNew") </span></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div id="tag-grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#tag-grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("List", "Reward"))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    
+                },
+                error: function(e) {
+                    display_kendoui_grid_error(e);
+                    // Cancel the changes
+                    this.cancelChanges();
+                },
+                
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            pageable: {
+                refresh: true,
+                numeric: false,
+                previousNext: false,
+                info: false,
+                
+            },
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+
+            columns: [
+                {
+                    field: "Reward_Picture.Url",
+                    title: "@T("Admin.Catalog.Products.Fields.PictureThumbnailUrl")",
+                    template: '<a class="k-link" href="#=Reward_Picture.Url#"><img src="#=Reward_Picture.Url#" width="150"/></a>',
+                    width: 100
+                },
+                {
+                    field: "Reward_Name",
+                    title: "@T("Admin.Reward.Reward.Fields.Reward_Name")",
+                    width: 300
+                },
+                {
+                    field: "Reward_Description",
+                    title: "@T("Admin.Reward.Reward.Fields.Reward_Description")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" }
+                },
+                {
+                    field: "PurchaseStartTime",
+                    title: "@T("Admin.Reward.Reward.Fields.PurchaseStartTime")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    type: "date",
+                    format: "{0:G}"
+                },
+                {
+                    field: "PurchaseEndTime",
+                    title: "@T("Admin.Reward.Reward.Fields.PurchaseEndTime")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    type: "date",
+                    format: "{0:G}"
+                },
+                {
+                    field: "Quantity",
+                    title: "@T("Admin.Reward.Reward.Fields.Quantity")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" }
+                },
+                {
+                    field: "Point",
+                    title: "@T("Admin.Reward.Reward.Fields.Point")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" }
+                },
+                {
+                    field: "StartTime",
+                    title: "@T("Admin.Reward.Reward.Fields.StartTime")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    type: "date",
+                    format: "{0:G}"
+                },
+                {
+                    field: "ExpiredTime",
+                    title: "@T("Admin.Reward.Reward.Fields.ExpiredTime")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    type: "date",
+                    format: "{0:G}"
+                },
+                {
+                    field: "CreateTime",
+                    title: "@T("Admin.Reward.Reward.Fields.CreateTime")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    type: "date",
+                    format: "{0:G}"
+
+                },
+                {
+                    field: "Category",
+                    title: "@T("Admin.Reward.Reward.Fields.Category")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                },
+                {
+                    field: "Activate",
+                    title: "@T("Admin.Reward.Reward.Fields.Activate")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: '# if(Activate) {# <i class="fa fa-check" aria-hidden="true" style="color:green"></i> #} else {# <i class="fa fa-times" aria-hidden="true" style="color:red"></i> #} #'
+                },
+                {
+                    field: "Id",
+                    title: "@T("Admin.Common.Edit")",
+                    width: 50,
+                    template: '<a class="btn btn-sm btn-default" href="Edit/#=Id#"><i class="fa fa-pencil"></i> @T("Admin.Common.Edit")</a>'
+                }
+            ]
+        });
+    });
+</script>

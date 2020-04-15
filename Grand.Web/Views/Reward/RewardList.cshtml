@@ -1,0 +1,150 @@
+﻿<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div class="row">
+        <div class="card col-10 h-10 totalpoint">Rewards</div>
+        <div class="card col-2 h-10">My Vouchers</div>
+    </div>
+    <div class="row h-5"></div>
+    <div class="row">
+        <div class="container col-2">
+            @Html.Partial("SideBar")
+        </div>
+        <div class="container col-10 ">
+            <ul class="nav nav-tabs nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#header">Active</a>
+
+                </li>
+                <li class="nav-item">
+
+
+                </li>
+                <li class="nav-item">
+
+
+                </li>
+            </ul>
+            <div class="tab-content" id="tabcontent">
+                <div class="card-header tab-pane container active bg-light" id="header">
+
+                </div>
+                <div class="card-header tab-pane container fade" id="header1">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card-group" id="group" style="display:none">
+
+    <div class="card col-sm-2 h-10" id="pic">
+
+        <img src="http://localhost:16592/content/images/thumbs/5cb0732d05ff030f8ce6ca5a.jpeg" class="card-img img-responsive center-block">
+
+    </div>
+    <div class="card col-sm-7 h-10" id="context">
+
+        <h5 id="title" class="card-text RewardName"></h5>
+        <p class="card-text Purchase">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <p class="card-text Redeem"><small class="text-muted">Last updated 3 mins ago</small></p>
+
+    </div>
+
+    <div class="card col-sm-2 text-center h-10" id="point">
+
+        <h5 class="card-text text-center point">200 PTS</h5>
+
+
+    </div>
+    <div class="card col-sm-1 h-10" id="redirect">
+
+        <a href="PurchaseVoucher" class="next round" id="Purchase">&#8250;</a>
+
+    </div>
+
+</div>
+
+<script>
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url: "@(Url.Action("RewardList", "Reward"))",
+
+        success: function (data) {
+            if (data.error != null) {
+                alert(data.error);
+            }
+            //alert(data);
+            console.log(data);
+            $.each(data, function (i, a) {
+                console.log(a.Date);
+                //var re = $("#group").clone();
+                //re.show();
+                //$("#header").append(re);
+                var re = $("#group").clone();
+                //re.$("#pic").append(pic);
+                re.find(".img-responsive").attr("src", a.Reward_Picture.Url);
+                re.find(".RewardName").text(a.Reward_Name);
+                re.find(".Purchase").text("Purchase: " + a.PurchaseStartTime);
+                re.find(".Redeem").text("Redeem by " + a.Date);
+                re.find("#Purchase").attr("href", "PurchaseVoucher/" + a.Id);
+
+                re.find(".point").text(a.Point +" pts");
+                $("#tabcontent").append(re.show());
+
+            });
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert(xhr.responseJSON.Errors);
+        }
+    });
+</script>
+
+@*<script type="text/javascript">
+    function RedeemItem(id) {
+        console.log(id);
+
+        postData = { Id: id };
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            data: postData,
+            url: "@(Url.Action("PurchaseVoucher", "Reward"))",
+
+            success: function (data) {
+                if (data.error != null) {
+                    alert(data.error);
+                }
+
+                console.log(data);
+                $.each(data, function (i, a) {
+
+
+                });
+            },
+            error: function (xhr) {
+                console.log(xhr);
+                alert(xhr.responseJSON.Errors);
+            }
+        });
+    }
+
+
+</script>*@
+

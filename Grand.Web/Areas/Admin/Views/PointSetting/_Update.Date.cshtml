@@ -1,0 +1,25 @@
+﻿@model Grand.Web.Areas.Admin.Models.PointSetting.PointSettingModel
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="StartDate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="StartDate" />
+                <span asp-validation-for="StartDate"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="EndDate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="EndDate" />
+                <span asp-validation-for="EndDate"></span>
+            </div>
+        </div>
+    </div>
+</div>

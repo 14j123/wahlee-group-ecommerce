@@ -1,0 +1,132 @@
+﻿@model Grand.Web.Areas.Admin.Models.Reward.RewardModel
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#addProductPicture').click(function () {
+                var pictureId = $("#@Html.FieldIdFor(model => model.Reward_Picture.PictureId)").val();
+
+                if (pictureId == 0) {
+                    alert('Upload picture first');
+                    return;
+                }
+
+                $('#addProductPicture').attr('disabled', true);
+
+                var postData = {
+                    pictureId: pictureId,
+
+                    productId: '@Model.Id'
+                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("ProductPictureAdd", "Reward"))",
+                    data: postData,
+                    success: function(data) {
+                        var grid = $("#productpictures-grid");
+                        grid.data('kendoGrid').dataSource.read();
+                        $('#addProductPicture').attr('disabled', false);
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseJSON.Errors);
+                        $('#addProductPicture').attr('disabled', false);
+                    }
+                });
+                $('#addProductPicture').attr('disabled', false);
+            });
+        });
+</script>
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Reward_Picture.PictureId" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Reward_Picture.PictureId" />
+                <span asp-validation-for="Reward_Picture.PictureId"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <admin-label asp-for="Reward_Name" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="Reward_Name" />
+            <span asp-validation-for="Reward_Name"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="Reward_Description" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="Reward_Description" />
+            <span asp-validation-for="Reward_Description"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="Quantity" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="Quantity" />
+            <span asp-validation-for="Quantity"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="Point" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="Point" />
+            <span asp-validation-for="Point"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="PurchaseStartTime" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="PurchaseStartTime" />
+            <span asp-validation-for="PurchaseStartTime"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="PurchaseEndTime" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="PurchaseEndTime" />
+            <span asp-validation-for="PurchaseEndTime"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="Category" />
+        <div class="col-md-9 col-sm-9">
+            <admin-select asp-for="Category" asp-items="Model.selectedList" />
+            <span asp-validation-for="Category"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="StartTime" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="StartTime" />
+            <span asp-validation-for="StartTime"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <admin-label asp-for="ExpiredTime" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="ExpiredTime" />
+            <span asp-validation-for="ExpiredTime"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <admin-label asp-for="Activate" />
+        <div class="col-md-9 col-sm-9">
+            <admin-input asp-for="Activate" />
+            <span asp-validation-for="Activate"></span>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

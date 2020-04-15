@@ -1,0 +1,299 @@
+﻿<header role="presentation" class="newnavbar  navposition">
+
+    @*@await Component.InvokeAsync("Widget", new { widgetZone = "header" })*@
+    @*<nav class="navbar fixed-top navbar-light navUp mobile-top p-0" role="navigation">
+        <ul class="mobile-top-menu container px-2 px-sm-0 d-lg-none d-flex mb-0">
+            @*<li class="logo-mobile"></li>
+                <li class="nav-item d-flex align-items-center d-lg-none mobile-search" data-toggle="modal" data-target="#searchModal">
+                    <a class="nav-link">
+                    bar-collapa    <span class="material-icons mat">
+                            search
+                        </span>
+                    </a>
+                </li>*@
+
+
+    @*<div class="headBottom d-flex align-items-center d-lg-inline-flex text-lg-left text-center mt-0 mb-0">
+                <div class="header-logo pr-0 pl-0 d-lg-block d-none">
+                    @await Component.InvokeAsync("Logo")
+                </div>
+                <div class="col-lg-6 col formSearch ml-auto pr-0 d-none d-lg-block">
+                    @await Component.InvokeAsync("SearchBox")
+                </div>
+            </div>
+
+
+        </ul>
+    *@
+
+
+
+    <div class="headBottom navframework">
+        @*navframework*@
+
+
+
+
+
+
+        <div class="header-logo pr-0 pl-0 d-lg-block d-none">
+            @await Component.InvokeAsync("Logo")
+
+        </div>
+        <div class="upperdiv">
+            <div class="maindiv marginbelow40 middlemenudiv  padding-tb-20 marginbelow20">
+                <a href="@Url.RouteUrl("HomePage")" class="middlenavdiv">Store Location</a>
+                <div class="navdivider"></div>
+                <a href="@Url.RouteUrl("HomePage")" class="middlenavdiv">Help</a>
+                <div class="navdivider"></div>
+                <a href="@Url.RouteUrl("HomePage")" class="middlenavdiv">Notifications</a>
+                <div class="navdivider"></div>
+                <a href="@Url.RouteUrl("HomePage")" class="middlenavdiv">Track Order</a>
+            </div>
+            <div>
+                @await Component.InvokeAsync("SearchBox")
+            </div>
+        </div>
+        <div>
+            <div class="languagediv">
+
+                <div><a href="@Url.RouteUrl("register")" class="whitecolor">Sign Up</a></div>|
+                <div><a href="@Url.RouteUrl("Login")" class="whitecolor">Login</a></div>
+
+                <div class="paddingleft35 whitecolor">EN | CN</div>
+            </div>
+            <div>
+                @await Component.InvokeAsync("HeaderLinks")
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    .dropdowncategoryctn {
+        background-color: #fff;
+        width: 100%;
+    }
+    .dropdowncategoryinner{
+        width:60%;
+        display:flex;
+        flex-direction:row;
+        justify-content:flex-start;
+        margin:0 auto;
+    }
+    .innerleft {
+        background-color: #55047c;
+        width:100%;
+    }
+    .categoryttitem {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: 0.3s all ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #fff;
+        width:100%;
+    }
+        .categoryttitem.selected {
+            background-color: #fff;
+            color: #55047c;
+        }
+    .otherinner{
+        width:100%; 
+    }
+    .innercontent {
+        display: none;
+        width: 100%;
+        height: 100%;
+        align-items: flex-start;
+    }
+    .categoryttitem:hover, .otherinner .categoryttitem {
+        background-color: #fff;
+        color: #55047c;
+    }
+    .categoryttitem:hover > .icon {
+        background-image: url(../Themes/DefaultClean/Content/images/slicing/purpleleftarrow.png);
+    }
+            .otherinner .categoryttitem > .icon {
+                background-image: url(../Themes/DefaultClean/Content/images/slicing/purplerightarrow.png);
+            }
+    .categoryttitem .title {
+        
+    }
+    .categoryttitem .icon {
+        background-image: url(../Themes/DefaultClean/Content/images/slicing/rightarrow.png);
+        background-position: center;
+        height: 30px;
+        width: 30px;
+        background-size: 20px;
+        background-repeat: no-repeat;
+    }
+    .categoryttitem .icon.selected {
+        background-image: url(../Themes/DefaultClean/Content/images/slicing/purpleleftarrow.png);
+    }
+</style>
+
+<div class="dropdowncategoryctn">
+    <div class="dropdowncategoryinner">
+        <div class="innerleft">
+            <div id="categoryttitem_0" class="categoryttitem" data-id="0">
+                <div class="title">
+                    Kitchen & Dining
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="1">
+                <div class="title">
+                    Home Appliances
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="2">
+                <div class="title">
+                    Beauty Tools
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="3">
+                <div class="title">
+                    Audio Visual
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="4">
+                <div class="title">
+                    Digital Gadget
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="0">
+                <div class="title">
+                    Personal Audio
+                </div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="5">
+                <div class="title">Drones</div>
+                <div class="icon"></div>
+            </div>
+            <div class="categoryttitem" data-id="6">
+                <div class="title">
+                    URBANbo Combo
+                </div>
+                <div class="icon"></div>
+            </div>
+        </div>
+        <div class="middleinner otherinner">
+            <div id="secondcat_0" class="innercontent">
+                <div class="categoryttitem" data-id="0">
+                    <div class="title">
+                        Air Conditioner
+                    </div>
+                    <div class="icon"></div>
+                </div>
+            </div>
+            <div id="secondcat_1" class="innercontent">
+                <div class="categoryttitem" data-id="1">
+                    <div class="title">
+                        Air Cooler & Air Purifier
+                    </div>
+                    <div class="icon"></div>
+                </div>
+                <div class="categoryttitem" data-id="4">
+                    <div class="title">
+                        Air Conditioner 1
+                    </div>
+                    <div class="icon"></div>
+                </div>
+                <div class="categoryttitem" data-id="5">
+                    <div class="title">
+                        Air Conditioner 2
+                    </div>
+                    <div class="icon"></div>
+                </div>
+            </div>
+            <div id="secondcat_2" class="innercontent">
+                <div class="categoryttitem" data-id="2">
+                    <div class="title">
+                        Garment Steamer
+                    </div>
+                    <div class="icon"></div>
+                </div>
+            </div>
+        </div>
+        <div class="rightinner otherinner">
+            <div id="thirdcat_0" class="innercontent">
+                <div class="categoryttitem">
+                    <div class="title">
+                        Air Conditioner
+                    </div>
+                </div>
+                <div class="categoryttitem">
+                    <div class="title">
+                        Air Cooler & Air Purifier
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var hidecontenttimeout = "";
+    $(function () {
+        function hidecontenttimer() {
+            hidecontenttimeout = setTimeout(function () {
+                $(".middleinner .innercontent").hide();
+                $(".rightinner .innercontent").hide();
+            },3000);
+        }
+
+        $(".dropdowncategoryinner").hover(function () { // hover in function
+            clearTimeout(hidecontenttimeout);
+        }, function () { //hover out function
+            clearTimeout(hidecontenttimeout);
+            hidecontenttimer();
+        });
+
+        $(".innerleft .categoryttitem").hover(function () { // hover in function
+            $(".middleinner .innercontent").hide();
+            var dataid = $(this).attr("data-id");
+            $("#secondcat_" + dataid).show();
+        }, function () { //hover out function
+            $(".rightinner .innercontent").hide();
+            $(".innerleft .categoryttitem").removeClass("selected");
+            //var dataid = $(this).attr("data-id");
+            //$("#secondcat_" + dataid).hide();
+        });
+
+        $(".middleinner .categoryttitem").hover(function () {
+            $(".innerleft .categoryttitem").removeClass("selected");
+            $(".rightinner .innercontent").hide();
+            var dataid = $(this).attr("data-id");
+            $("#thirdcat_" + dataid).show();
+            $(".innerleft").find("#categoryttitem_" + dataid).addClass("selected");
+        }, function () {
+            //var dataid = $(this).attr("data-id");
+            //$("#secondcat_" + dataid).hide();
+        });
+    });
+</script>
+
+@*<div class="dropdown-content">
+
+    jksdhsadkjshdaksjdhakjwhkjdahwkj
+
+</div>
+<script>
+
+
+    $("#categorylistbtn").click(function () {
+        $("dropdown-content").addClass("active");
+        $("dropdown-content").slideToggle("fast");
+        console.log("can work");
+        });
+</script>*@
+

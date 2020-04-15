@@ -1,0 +1,208 @@
+﻿@using Grand.Web.Areas.Admin.Models.CouponsModule;
+
+@model CouponModel
+@using Grand.Core.Domain.CouponsModule;
+@using Grand.Framework.UI;
+@{
+    <vc:admin-widget widget-zone="coupon_details_requirements_top" additional-data="Model" />
+    if (!String.IsNullOrEmpty(Model.Id))
+    {
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $("#@Html.FieldIdFor(model => model.AddCouponRequirement)").change(loadNewRequirementBox);
+
+                //load add requirement box
+                loadNewRequirementBox();
+
+                //load existing requirements
+                loadExistingRequirements();
+
+                //adding requirement event
+                $("#couponRequirementContainer").bind('grandnewcouponruleadded', function(event, newRequirementId) {
+
+                    var couponId = '@Model.Id';
+
+                    var postData = {
+                        couponRequirementId: newRequirementId,
+                        couponId: couponId
+                    };
+                    addAntiForgeryToken(postData);
+
+                    $.ajax({
+                        cache:false,
+                        type: "POST",
+                        url: "@(Url.Action("GetCouponRequirementMetaInfo", "Coupon"))",
+                        data: postData,
+                        success: function (result) {
+                            couponRequirements.push(
+                                {
+                                    couponRequirementId: newRequirementId,
+                                    ruleName : result.ruleName,
+                                    url : result.url
+                                }
+                                );
+                            loadExistingRequirements();
+                        },
+                        error:function (xhr, ajaxOptions, thrownError) {
+                            alert('Failed to load new coupon requirement info. Please refresh the page');
+                        }
+                    });
+
+                });
+            });
+
+
+            //load requirement HTML
+            function loadRequirement(configureRuleUrl, placeholderName) {
+                $.ajax({
+                    cache:false,
+                    url: configureRuleUrl,
+                    dataType: "html",
+                    success: function (result) {
+                        $(placeholderName).html(result);
+                        App.stopPageLoading();
+                    },
+                    error:function (xhr, ajaxOptions, thrownError) {
+                        $(placeholderName).html('Failed to load requirement content.');
+                        App.stopPageLoading();
+                    }
+                });
+            }
+
+            //load HTML for adding requirement
+            function loadNewRequirementBox() {
+                App.startPageLoading();
+                //load URL
+                var ruleSystemName = $("#@Html.FieldIdFor(model => model.AddCouponRequirement)").val();
+                var couponId = '@Model.Id';
+                if (ruleSystemName != '') {
+                    $.ajax({
+                        cache:false,
+                        url: "@(Url.Action("GetCouponRequirementConfigurationUrl", "Coupon"))",
+                        data: { "systemName": ruleSystemName, "couponId": couponId },
+                        success: function (result) {
+                            var configureRuleUrl = result.url;
+                            //now load the content
+                            loadRequirement(configureRuleUrl, '#addrequirementplaceholder');
+                        },
+                        error:function (xhr, ajaxOptions, thrownError){
+                            $('#addrequirementplaceholder').html('Failed to load requirement URL');
+                        }
+                    });
+                }
+                else {
+                    $('#addrequirementplaceholder').html('');
+                    App.stopPageLoading();
+                }
+            }
+
+            //array of exisiting coupon requirements
+            var couponRequirements = [
+                     @for (int i = 0; i < Model.CouponRequirementMetaInfos.Count; i++)
+                    {
+                        var drmi = Model.CouponRequirementMetaInfos[i];
+                        <text>{ couponRequirementId: "@(drmi.CouponRequirementId)", ruleName: "@(drmi.RuleName)", url:  "@(Html.Raw(drmi.ConfigurationUrl))" } </text> if (i != Model.CouponRequirementMetaInfos.Count - 1)
+                                                                                                                                                                         {<text>, </text>}
+                    }
+            ];
+
+            //load HTML for exisiting requirements
+            function loadExistingRequirements() {
+                App.startPageLoading();
+                $("#couponRequirementContainer").html('');
+                $("#couponRequirementTemplate").tmpl(couponRequirements).appendTo("#couponRequirementContainer");
+
+                var couponRequirementsLen = couponRequirements.length;
+                for (var i=0; i<couponRequirementsLen; i++) {
+                    var url = couponRequirements[i].url;
+                    var couponRequirementId = couponRequirements[i].couponRequirementId;
+                    var placeholderName = '#editrequirementplaceholder' + couponRequirementId;
+                    $(placeholderName).html('loading...');
+                    loadRequirement(url, placeholderName);
+                }
+                App.stopPageLoading();
+            }
+
+            //delete requirement rule
+            function deleteRequirement(couponRequirementId) {
+                var couponId = '@Model.Id';
+
+                var postData = {
+                    couponRequirementId: couponRequirementId,
+                    couponId: couponId
+                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("DeleteCouponRequirement", "Coupon"))",
+                    data: postData,
+                    success: function (data) {
+                        removeRequirementByElement(couponRequirements, couponRequirementId);
+                        loadExistingRequirements();
+                    },
+                    error:function (xhr, ajaxOptions, thrownError){
+                        alert('Failed to delete requirement.');
+                    }
+                });
+
+
+                function removeRequirementByElement(arrayName,couponRequirementId) {
+                    for(var i=0; i<arrayName.length; i++) {
+                        if(arrayName[i].couponRequirementId==couponRequirementId) {
+                            arrayName.splice(i,1);
+                        }
+                    }
+                }
+
+            }
+
+        </script>
+
+        <!-- Template container -->
+        <div class="form-horizontal" id="couponRequirementContainer">
+        </div>
+        <!-- coupon requirement template -->
+        <script id="couponRequirementTemplate" type="text/html">
+            <div class="form-body" id="editrequirement{{= couponRequirementId }}">
+                <div class="note note-info">@T("Admin.Promotions.Coupons.Requirements.CouponRequirementType") <strong>{{= ruleName }}</strong></div>
+                <div class="form-group" id="editrequirementplaceholder{{= couponRequirementId }}"></div>
+                <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6">
+                    <input type="button" id="deleterequirement{{= couponRequirementId }}" onclick="deleteRequirement('{{= couponRequirementId }}')" class="btn default" value="@T("Admin.Promotions.Coupons.Requirements.Remove")" />
+                </div>
+            </div>
+        </script>
+
+        <div class="form-horizontal">
+            <div class="form-body">
+                <div class="note note-info">
+                    <strong>@T("Admin.Promotions.Coupons.Requirements.AddNew")</strong>
+                </div>
+                <div class="form-group">
+                    <admin-label asp-for="AddCouponRequirement" />
+                    <div class="col-md-9 col-sm-9">
+                        <admin-select asp-for="AddCouponRequirement" asp-items="Model.AvailableCouponRequirementRules" />
+                        <span asp-validation-for="AddCouponRequirement"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-body">
+                <div id="addrequirementplaceholder">
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="note note-info">
+            @T("Admin.Promotions.Coupons.Requirements.SaveBeforeEdit")
+        </div>
+    }
+    <vc:admin-widget widget-zone="coupon_details_requirements_bottom" additional-data="Model" />
+}

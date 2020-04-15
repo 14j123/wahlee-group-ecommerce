@@ -1,0 +1,273 @@
+﻿@using Grand.Web.Areas.Admin.Models.CouponsModule;
+
+@model CouponModel
+@using Grand.Core.Domain.CouponsModule;
+@using Grand.Framework.UI;
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#@Html.FieldIdFor(model => model.CouponTypeId)").change(toggleCouponType);
+            $("#@Html.FieldIdFor(model => model.UsePercentage)").click(toggleUsePercentage);
+            $("#@Html.FieldIdFor(model => model.RequiresCouponCode)").click(toggleRequiresCouponCode);
+            $("#@Html.FieldIdFor(model => model.CouponLimitationId)").change(toggleLimitation);
+            $("#@Html.FieldIdFor(model => model.CalculateByPlugin)").click(toggleCalculate);
+
+            toggleCouponType();
+            toggleLimitation();
+            toggleUsePercentage();
+            toggleRequiresCouponCode();
+            toggleCalculate();
+        });
+
+        function toggleCalculate() {
+            var selectedCalculateByPlugin = $("#@Html.FieldIdFor(model => model.CalculateByPlugin)").is(':checked');
+            if (selectedCalculateByPlugin) {
+                $('#pnlUsePercentage').hide();
+                $('#pnlCouponAmount').hide();
+                $('#pnlCouponPercentage').hide();
+                $('#pnlMaximumCouponAmount').hide();
+                $('#pnlCouponPluginName').show();
+            }
+            else {
+                $('#pnlUsePercentage').show();
+                $('#pnlCouponPluginName').hide();
+                toggleUsePercentage();
+            }
+        }
+
+
+    function toggleCouponType() {
+            var selectedCouponTypeId = $("#@Html.FieldIdFor(model => model.CouponTypeId)").val();
+            if (selectedCouponTypeId == @(((int)CouponType.AssignedToCategories).ToString())) {
+            $('#tab-applied-to-categories').show();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').hide();
+        }
+        else if (selectedCouponTypeId == @(((int)CouponType.AssignedToManufacturers).ToString())) {
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').show();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').hide();
+        }
+       if (selectedCouponTypeId == @(((int)CouponType.AssignedToSkus).ToString())) {
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').show();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').hide();
+        }
+        else if(selectedCouponTypeId == @(((int)CouponType.AssignedToVendors).ToString())){
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').show();
+            $('#tab-applied-to-stores').hide();
+        }
+        else if(selectedCouponTypeId == @(((int)CouponType.AssignedToStores).ToString())){
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').show();
+            }
+        else if(selectedCouponTypeId == @(((int)CouponType.AssignedToAllProducts).ToString())){
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').show();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').hide();
+        }
+        else {
+            $('#tab-applied-to-categories').hide();
+            $('#tab-applied-to-manufacturers').hide();
+            $('#tab-applied-to-products').hide();
+            $('#pnlMaximumCouponedQuantity').hide();
+            $('#tab-applied-to-vendors').hide();
+            $('#tab-applied-to-stores').hide();
+            }
+        }
+
+        function toggleLimitation() {
+            var selectedCouponLimitationId = $("#@Html.FieldIdFor(model => model.CouponLimitationId)").val();
+            if (selectedCouponLimitationId == @(((int)CouponLimitationType.NTimesOnly).ToString()) || selectedCouponLimitationId == @(((int)CouponLimitationType.NTimesPerCustomer).ToString())) {
+                //'N Times Only' or 'N Times Per Customer'
+                $('#pnlLimitationTimes').show();
+        }
+        else {
+                $('#pnlLimitationTimes').hide();
+        }
+        }
+
+        function toggleUsePercentage() {
+            if ($('#@Html.FieldIdFor(model => model.UsePercentage)').is(':checked')) {
+                $('#pnlCouponPercentage').show();
+                $('#pnlCouponAmount').hide();
+                $('#pnlMaximumCouponAmount').show();
+            } else {
+                $('#pnlCouponPercentage').hide();
+                $('#pnlCouponAmount').show();
+                $('#pnlMaximumCouponAmount').hide();
+            }
+        }
+
+        function toggleRequiresCouponCode() {
+            if ($('#@Html.FieldIdFor(model => model.RequiresCouponCode)').is(':checked')) {
+                $('#tab-couponcode').show();
+                $('#pnlReused').show();
+            } else {
+                $('#tab-couponcode').hide();
+                $('#pnlReused').hide();
+            }
+        }
+</script>
+<vc:admin-widget widget-zone="coupon_details_info_top" additional-data="Model" />
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Name" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="CouponTypeId" />
+            <div class="col-md-9 col-sm-9">
+                <admin-select asp-for="CouponTypeId" asp-items="((CouponType)Model.CouponTypeId).ToSelectList()" />
+                <span asp-validation-for="CouponTypeId"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlUsePercentage">
+            <admin-label asp-for="UsePercentage" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="UsePercentage" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="UsePercentage"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlCouponAmount">
+            <admin-label asp-for="CouponAmount" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="CouponAmount" /> [@Model.PrimaryStoreCurrencyCode]
+                <span asp-validation-for="CouponAmount"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlCouponPercentage">
+            <admin-label asp-for="CouponPercentage" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="CouponPercentage" />
+                <span asp-validation-for="CouponPercentage"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlMaximumCouponAmount">
+            <admin-label asp-for="MaximumCouponAmount" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="MaximumCouponAmount" /> [@Model.PrimaryStoreCurrencyCode]
+                <span asp-validation-for="MaximumCouponAmount"></span>
+            </div>
+        </div>
+        @*<div class="form-group" id="pnlCalculateByPlugin">
+            <admin-label asp-for="CalculateByPlugin" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="CalculateByPlugin" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="CalculateByPlugin"></span>
+            </div>
+        </div>*@
+        @*<div class="form-group" id="pnlCouponPluginName">
+            <admin-label asp-for="CouponPluginName" />
+            <div class="col-md-9 col-sm-9">
+                <admin-select asp-for="CouponPluginName" asp-items="Model.AvailableCouponAmountProviders" />
+                <span asp-validation-for="CouponPluginName"></span>
+            </div>
+        </div>*@
+        <div class="form-group">
+            <admin-label asp-for="StartDate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="StartDate" />
+                <span asp-validation-for="StartDate"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="EndDate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="EndDate" />
+                <span asp-validation-for="EndDate"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="RequiresCouponCode" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="RequiresCouponCode" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="RequiresCouponCode"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlReused">
+            <admin-label asp-for="Reused" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="Reused" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="Reused"></span>
+            </div>
+        </div>
+        @*<div class="form-group">
+            <admin-label asp-for="IsCumulative" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="IsCumulative" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="IsCumulative"></span>
+            </div>
+        </div>*@
+        <div class="form-group">
+            <admin-label asp-for="CouponLimitationId" />
+            <div class="col-md-9 col-sm-9">
+                <admin-select asp-for="CouponLimitationId" asp-items="((CouponLimitationType)Model.CouponLimitationId).ToSelectList()" />
+                <span asp-validation-for="CouponLimitationId"></span>
+            </div>
+        </div>
+        <div class="form-group" id="pnlLimitationTimes">
+            <admin-label asp-for="LimitationTimes" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="LimitationTimes" />
+                <span asp-validation-for="LimitationTimes"></span> @T("Admin.Promotions.Coupons.Fields.LimitationTimes.Times")
+            </div>
+        </div>
+        <div class="form-group" id="pnlMaximumCouponedQuantity">
+            <admin-label asp-for="MaximumCouponedQuantity" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="MaximumCouponedQuantity" />
+                <span asp-validation-for="MaximumCouponedQuantity"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="IsEnabled" />
+            <div class="col-md-9 col-sm-9">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <admin-input asp-for="IsEnabled" />
+                    <span></span>
+                </label>
+                <span asp-validation-for="IsEnabled"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<vc:admin-widget widget-zone="coupon_details_info_bottom" additional-data="Model" />

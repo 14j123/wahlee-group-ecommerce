@@ -1,0 +1,209 @@
+﻿@model SearchBoxModel
+@using System.Text.Encodings.Web
+
+
+
+
+
+<div>
+    <form asp-route="ProductSearch" method="get" id="small-search-box-form">
+        <input type="hidden" asp-for="Box" value="true" />
+        <label for="small-searchterms" class="sr-only">@T("Search.SearchBox.Tooltip")</label>
+        @*<div class="input-group">
+
+            <div class="input-group-prepend  " id="dropmenubtn">
+
+                <div class="input-group-text  categorybtn" id="categorydropdown">
+                    Category
+                    <img class="menucategoryicon" src="/Themes/DefaultClean/Content/images/downarrow.png">
+
+
+                </div>
+
+
+
+
+
+            </div>
+
+            <input type="text" class="form-control search-box-text searchboxdesign ui-autocomplete-input" id="small-searchterms" autocomplete="off" name="q" placeholder="Search for Products">
+            <span class="sr-only">@T("Search.SearchBox.Tooltip")</span>
+            <span class="material-icons mat searchiconsetting"> search </span>
+
+
+        </div>*@
+
+
+
+
+
+
+
+
+        <div class="input-group flex-row">
+
+            <div class="input-group dropdown  form-group searchdiv">
+                <div class="input-group-prepend " id="categorylistbtn">
+                    <span class="input-group-text  categorybtn ">
+                        Category
+                        <img class="menucategoryicon" src="/Themes/DefaultClean/Content/images/downarrow.png">
+                    </span>
+
+                </div>
+
+
+
+                <input type="text" class="form-control search-box-text searchboxdesign ui-autocomplete-input" id="small-searchterms" autocomplete="off" name="q" placeholder="Search for Products">
+                <span class="sr-only">Search store</span>
+                <span class="material-icons mat searchiconsetting">
+                    search
+                </span>
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+            <ul class="advanced-search-results row">
+                <li class="left-side col-md-6 col-12">
+                    <ul>
+                        <li class="categories-container">
+                            <a class="title">Categories</a>
+                            <div class="no-data pl-md-3 pl-0">No categories were found that matched your criteria.</div>
+                            <ul></ul>
+                        </li>
+                        <li class="manufacturers-container">
+                            <a href="/manufacturer/all" class="title">Manufacturers</a>
+                            <div class="no-data pl-0">No manufacturers were found that matched your criteria.</div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="right-side col-md-6 col-12">
+                    <a class="products-title title">Products</a>
+                    <div class="no-data pl-md-3 pl-0">No products were found that matched your criteria.</div>
+                    <ul class="products-container"></ul>
+                </li>
+                <li class="center-side col-12">
+                    <ul>
+                        <li class="blog-container mb-3">
+                            <a href="/blog" class="title">Blog</a>
+                            <div class="no-data pl-md-3 pl-0">No blog posts were found that matched your criteria.</div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+
+            <ul class="advanced-search-results row">
+                <li class="left-side col-md-6 col-12">
+                    <ul>
+                        <li class="categories-container">
+                            <a class="title">Categories</a>
+                            <div class="no-data pl-md-3 pl-0">@T("search.noresultstextcategory")</div>
+                            <ul></ul>
+                        </li>
+                        <li class="manufacturers-container">
+                            <a href="@Url.RouteUrl("ManufacturerList")" class="title">Manufacturers</a>
+                            <div class="no-data pl-0">@T("search.noresultstextmanufacturer")</div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="right-side col-md-6 col-12">
+                    <a class="products-title title">Products</a>
+                    <div class="no-data pl-md-3 pl-0">@T("search.noresultstext")</div>
+                    <ul class="products-container"></ul>
+                </li>
+                <li class="center-side col-12">
+                    <ul>
+                        <li class="blog-container mb-3">
+                            <a href="@Url.RouteUrl("Blog")" class="title">Blog</a>
+                            <div class="no-data pl-md-3 pl-0">@T("search.noresultstextblog")</div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        @*<div id="categorydiv" class="dropdownblanklist">
+
+        </div>*@
+
+
+
+
+
+        @if (Model.AvailableCategories.Any())
+        {
+            <select asp-for="SearchCategoryId" asp-items="Model.AvailableCategories" class="search-box-select custom-select input-group-addon"></select>
+        }
+        @*@await Component.InvokeAsync("Widget", new { widgetZone = "searchbox_before_search_button" })*@
+
+        @*<div class="input-group-append">
+            <button type="submit" class="btn btn-info search-box-button float-sm-right d-inline-flex">
+            <span class="sr-only">@T("Search.SearchBox.Tooltip")</span>
+            <span class="material-icons mat">
+                search
+            </span>
+            </button>
+        </div>*@
+
+
+        <script asp-location="Footer">
+        $(document).ready(function () {
+            @if (Model.AutoCompleteEnabled)
+            {
+                <text>
+                SearchAction.autocomplete(@(Model.SearchTermMinimumLength.ToString()),
+                    '@(Url.RouteUrl("ProductSearchAutoComplete"))',
+                    '@(Model.ShowProductImagesInSearchAutoComplete)'
+                );
+                </text>
+            }
+            @if (Model.SearchTermMinimumLength > 0)
+            {
+                <text>
+                SearchAction.init('@Html.Raw(JavaScriptEncoder.Default.Encode(T("Search.EnterSearchTerms").Text))');
+                </text>
+            }
+        });
+        </script>
+
+        @await Component.InvokeAsync("Widget", new { widgetZone = "searchbox" })
+
+
+        
+    </form>
+</div>

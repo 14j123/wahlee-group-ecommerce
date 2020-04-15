@@ -1,0 +1,80 @@
+﻿@model Grand.Web.Areas.Admin.Models.RewardSummary.RewardSummaryModel
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<div class="container">
+    <div class="row">
+        <div class="card col-10 h-10 totalpoint">Rewards</div>
+        <div class="card col-2 h-10">My Vouchers</div>
+    </div>
+    <div class="row h-5"></div>
+    <div class="row">
+        <div class="container col-2">
+            @Html.Partial("SideBar")
+        </div>
+
+        <div class="container col-10 ">
+            <div class="card text-center">
+                <img src=@Model.Url class="card-img img-responsive center-block">
+
+                <p class="card-text">@Model.Reward_Name</p>
+                <p class="card-text">Redemption valid from @Model.StartTime to @Model.ExpiredTime</p>
+                <p class="card-text">@Model.Point points</p>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Confirm & Pay</button>
+                <p class="card-text text-left .col-sm-10">Hightlights</p>
+                <p class="card-text">@Model.Highlights</p>
+                <p class="card-text text-left .col-sm-10">Terms & Conditions </p>
+                <p class="card-text">@Model.Term</p>
+                <p class="card-text text-left .col-sm-10">Contact Info </p>
+                <p class="card-text">@Model.Contact</p>
+                <p class="card-text text-left .col-sm-10">About Us</p>
+                <p class="card-text">@Model.About</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <p align="center" style="height: 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </p>
+                <p align="center" style="height: 5px;">
+                    Please enter your
+                </p>
+
+                <p align="center" style="height: 50px;">
+                    Login Password for veriﬁcation
+                </p>
+
+                <p align="center" style="height: 50px;">
+                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+                </p>
+
+                <p align="center" style="height: 50px;">
+                    <a type="button" class="btn btn-primary" href="/Reward/RedeemVoucherQRcode/@Model.Id" >Redeem</a>
+                </p>
+                <p align="center" style="height: 50px;">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</div>

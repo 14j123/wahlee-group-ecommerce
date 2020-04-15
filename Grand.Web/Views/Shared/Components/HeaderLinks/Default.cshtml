@@ -1,0 +1,160 @@
+﻿@model HeaderLinksModel
+@using System.Text.Encodings.Web
+@await Component.InvokeAsync("Widget", new { widgetZone = "header_links_before" })
+@if (Model.IsAuthenticated)
+{
+    @*@await Component.InvokeAsync("AdminHeaderLinks")*@
+        @*<li class="nav-item col d-flex">
+            <a class="ico-account nav-link d-flex justify-content-center" href="@Url.RouteUrl("CustomerInfo")">
+                <span class="hl-label"><span class="material-icons mat">account_circle</span></span>
+                <span class="d-flex align-items-center mobile-desc">@T("Account.MyAccount")</span>
+            </a>
+        </li>
+        <li class="nav-item col d-flex">
+            <a class="nav-link ico-logout" href="@Url.RouteUrl("Logout")">
+                <span class="hl-label">
+                    <span class="material-icons mat">
+                        lock
+                    </span>
+                </span>
+                <span class="d-flex align-items-center mobile-desc">@T("Account.Logout")</span>
+            </a>
+        </li>*@
+}
+else
+{
+    @*<li class="nav-item col d-flex">
+        <a class="nav-link" href="@Url.RouteUrl("Login")">
+            <span class="hl-label">
+                <span class="material-icons mat">
+                    lock_open
+                </span>
+            </span>
+            <span class="d-flex align-items-center mobile-desc">@T("Account.Login")</span>
+        </a>
+    </li>*@
+
+}
+
+
+    <div class="middle-top-div">
+
+
+
+
+
+
+
+
+
+
+        <div>
+            @*nav-item col d-flex*@
+            <a class="nav-link" href="@Url.RouteUrl("PrivateMessages", new { tab = "" })">
+                <span class="hl-label">
+                    <span class="material-icons whitecolor mat">
+
+                        email
+                    </span>
+                </span>
+                @*<div class="inbox-label d-none d-lg-flex  whitecolor align-items-center"></div>*@
+                <div class="inbox-unread d-none d-lg-flex align-items-center  whitecolor">@Model.UnreadPrivateMessages</div>
+                <div class="d-lg-none d-flex align-items-center text-muted mobile-desc ">@T("PrivateMessages.Inbox")</div>
+                <div class="cart-qty"></div>
+            </a>
+        </div>
+
+@if (Model.AllowPrivateMessages)
+{
+    <div>
+        <a class="nav-link whitecolor" href="@Url.RouteUrl("PrivateMessages", new { tab = "" })">
+            <div class="hl-label">
+                <span class=" material-icons  whitecolor mat">
+                    @*message*@
+                    envelope
+
+
+
+
+                    <i class="fas fa-envelope-square"></i>
+                </span>
+            </div>
+            <div class="inbox-label d-none d-lg-flex align-items-center">@T("PrivateMessages.Inbox")</div>
+            <div class="inbox-unread d-none d-lg-flex align-items-center">@Model.UnreadPrivateMessages</div>
+            <div class="d-lg-none d-flex align-items-center text-muted mobile-desc">@T("PrivateMessages.Inbox")</div>
+        </a>
+
+
+
+
+
+    </div>
+}
+@*@if (Model.WishlistEnabled)
+{
+    <li class="nav-item col wishlist-container">
+        <a class="nav-link" href="@Url.RouteUrl("Wishlist")">
+            <span class="wishlist-label">
+                @*wishlist-label hl-label
+                <span class="material-icons mat">
+                    favorite_border
+                </span>
+            </span>
+            <span class="d-flex align-items-center wish-name mobile-desc">
+                @T("Wishlist")
+            </span>
+            <span class="wishlist-qty d-none d-lg-flex">@T("Wishlist.HeaderQuantity", Model.WishlistItems)</span>
+        </a>
+    </li>
+}*@
+@if (Model.ShoppingCartEnabled)
+{
+    <div>
+    <div id="topcartlink">
+        <div class="btn-group dropdown">
+            <a @if (Model.MiniShoppingCartEnabled) { <text> class="nav-link js-offcanvas-trigger" data-offcanvas-trigger="right" href="#right" </text>  } else { <text> class="nav-link" href="@Url.RouteUrl("ShoppingCart")" </text>  }>
+                <span class="cart-label hl-label whitecolor">
+                    <span class="material-icons whitecolor mat">
+                        shopping_cart
+                    </span>
+                </span>
+                @*<span class="d-flex align-items-center cart-name mobile-desc">
+                    @T("ShoppingCart")
+                </span>*@
+                <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
+            </a>
+        </div>
+    </div>
+    </div>
+}
+@*@await Component.InvokeAsync("Widget", new { widgetZone = "header_links_after" })*@
+@if (Model.AllowPrivateMessages && !string.IsNullOrEmpty(Model.AlertMessage))
+{
+    //new private message notification
+    <script asp-location="Footer">
+            $(document).ready(function () {
+                displayPopupNotification('@Html.Raw(JavaScriptEncoder.Default.Encode(Model.AlertMessage))', 'success', false);
+        });
+
+
+
+
+
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>

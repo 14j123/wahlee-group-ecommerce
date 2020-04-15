@@ -1,0 +1,55 @@
+﻿@model Grand.Web.Areas.Admin.Models.PointWallet.PointWalletModel
+
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="LoyaltyPointEarn" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="LoyaltyPointEarn" />
+                <span asp-validation-for="LoyaltyPointEarn"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="ExpiredTime" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="ExpiredTime" />
+                <span asp-validation-for="ExpiredTime"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Reason" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Reason" asp-template="RichEditor"/>
+                <span asp-validation-for="Reason"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Customer_Email" />
+            <div class="col-md-9 col-sm-9">
+                <admin-select asp-for="Customer_Email" asp-items="Model.selectedList" />
+                
+                <span asp-validation-for="Customer_Email"></span>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

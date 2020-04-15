@@ -1,0 +1,29 @@
+﻿@using Grand.Web.Models.Coupons;
+@using System.Text.Encodings.Web
+
+@model CouponModel
+
+<div class="card gen" style="margin:10px 20px;" data-productid="@Model.Id">
+
+    <div><span>Name:</span>@Model.Name</div>
+
+    @if (Model.StartTime.HasValue || Model.EndTime.HasValue || Model.StartTime.HasValue && Model.EndTime.HasValue)
+    {
+        <div>@Model.StartTime.Value.ToLocalTime().ToString("dd") - @Model.EndTime.Value.ToLocalTime().ToString("dd MMM yyyy")</div>
+    }
+
+    
+    <div><span>percentage:</span>@Model.CouponPercentage%</div>
+
+
+    @if (Model.CouponAmount > 0)
+    {
+        <div><span>Price:</span>@Model.CouponAmount</div>
+    }
+
+</div>
+
+
+
+  
+

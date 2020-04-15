@@ -1,0 +1,100 @@
+﻿@using Grand.Web.Areas.Admin.Models.CouponsModule;
+
+@model CouponModel
+@inject IEventPublisher eventPublisher
+@using Grand.Framework.UI;
+@{
+    Html.AddScriptParts("~/scripts/jquery.tmpl.min.js", excludeFromBundle: true);
+}
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<script>
+    $(document).ready(function () {
+        $("#coupon-edit").show();
+        $("#coupon-edit").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+<div id="coupon-edit" style="display:none">
+    <ul>
+        <li tab-index="0">
+            @T("Admin.Promotions.Coupons.Info")
+        </li>
+        <li tab-index="1" id="tab-couponcode">
+            @T("Admin.Promotions.Coupons.CouponCodes")
+        </li>
+        <li tab-index="2">
+            @T("Admin.Promotions.Coupons.Requirements")
+        </li>
+        <li tab-index="3" id="tab-applied-to-products">
+            @T("Admin.Promotions.Coupons.AppliedToProducts")
+        </li>
+        <li tab-index="4" id="tab-applied-to-categories">
+            @T("Admin.Promotions.Coupons.AppliedToCategories")
+        </li>
+        <li tab-index="5" id="tab-applied-to-manufacturers">
+            @T("Admin.Promotions.Coupons.AppliedToManufacturers")
+        </li>
+        <li tab-index="7" id="tab-applied-to-vendors">
+            @T("Admin.Promotions.Coupons.AppliedToVendors")
+        </li>
+        <li tab-index="8" id="tab-applied-to-stores">
+            @T("Admin.Promotions.Coupons.AppliedToStores")
+        </li>
+        @if (!String.IsNullOrEmpty(Model.Id))
+        {
+            <li tab-index="6">
+                @T("Admin.Promotions.Coupons.History")
+            </li>
+        }
+    </ul>
+    
+    <div>
+       <partial name="_CreateOrUpdate.TabInfo" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabCouponCodes" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabRequirements" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabAppliedToProducts" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabAppliedToCategories" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabAppliedToManufacturers" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabAppliedToVendors" model="Model" />
+    </div>
+    <div>
+       <partial name="_CreateOrUpdate.TabAppliedToStores" model="Model" />
+    </div>
+    @if (!String.IsNullOrEmpty(Model.Id))
+    {
+        <div>
+           <partial name="_CreateOrUpdate.TabHistory" model="Model" />
+        </div>
+    }
+</div>
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "coupon-edit");
+    eventPublisher.Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+@*save selected tab index*@
+<input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">

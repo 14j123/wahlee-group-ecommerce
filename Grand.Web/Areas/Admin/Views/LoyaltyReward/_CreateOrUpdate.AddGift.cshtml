@@ -1,0 +1,239 @@
+﻿@using Grand.Web.Areas.Admin.Models.LuckyDrawGiftGroupingManage
+@model LuckyDrawGiftGroupingManageModel
+
+<div class="form-horizontal">
+    @if (String.IsNullOrEmpty(Model.Id))
+    {
+        <div class="note note-info">
+            @T("Admin.Configuration.Grouping.Resources.SaveBeforeEdit")
+        </div>
+    }
+    else
+    { 
+        <div class="portlet-body">
+            <div id="shipments-grid"></div>
+        </div>
+        <div class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group">
+                    <admin-label asp-for="Gift_Name" />
+                    <div class="col-md-9 col-sm-9">
+                        <admin-select asp-for="Gift_Name" asp-items="Model.selectedList" />
+                        <span asp-validation-for="Gift_Name"></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <admin-label asp-for="Available_Quantity" />
+                    <div class="col-md-9 col-sm-9">
+                        <admin-input asp-for="Available_Quantity" />
+                        <span asp-validation-for="Available_Quantity"></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+
+                    
+                    <div class="col-md-3 col-sm-3 text-right">
+                        
+                    </div>
+                    <div class="col-md-9 col-sm-9" id="Quantity">
+                        Available Unit : @Model.Quantity
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-sm-3">
+                    </div>
+                    <div class="col-md-9 col-sm-9">
+                        <input type="button" id="AddGift" class="btn green" value="@T("Admin.Common.Add")" />
+                        @*<button class="btn btn-success" id="AddGift"><i class="fa fa-check"></i> @T("Admin.Common.Add") </button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    
+
+        $('#AddGift').click(function () {
+
+            var GiftName = $("#@Html.FieldIdFor(model => model.Gift_Name)").val();
+            var Quantity = $("#@Html.FieldIdFor(model => model.Available_Quantity)").val();
+
+
+            var postData = {
+                GiftName: GiftName,
+                Quantity: Quantity,
+                accountId: '@Model.Id'
+			};
+			console.log(postData);
+
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("AddGift", "LoyaltyReward"))",
+                data: postData,
+                success: function (data) {
+                    if (data.error != null) {
+                        alert(data.error);
+                    }
+
+                    console.log(data.selectedList);
+                    var grid = $("#shipments-grid");
+                    grid.data('kendoGrid').dataSource.read();
+                    $('#AddGift').attr('disabled', false);
+                    $('#@Html.FieldIdFor(model => Model.Gift_Name)').html("");
+                    $.each(data.selectedList, function (i, item) {
+                        var option = "<option value=" + item.Value + ">" + item.Text + "</option>";
+                        $('#@Html.FieldIdFor(model => Model.Gift_Name)').append(option);
+                    });
+                              
+                    
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+
+                    alert(xhr.responseJSON.Errors);
+                    $('#AddGift').attr('disabled', false);
+                }
+            });
+        });
+</script>
+
+<script>
+    $(document).ready(function () {
+        console.log(addAntiForgeryToken);
+        $("#shipments-grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("Resources", "LoyaltyReward", new { Id = Model.Id}))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+
+                    update: {
+                        url: "@Html.Raw(Url.Action("ResourceUpdate", "LoyaltyReward", new { Id = Model.Id , Gift_Name = Model.Gift_Name, selectedList = Model.selectedList, }))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                    destroy: {
+                        url: "@Html.Raw(Url.Action("ResourceDelete", "LoyaltyReward", new { Id = Model.Id }))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        id: "Id",
+                        fields: {
+                            Gift_Name: { editable: true, type: "string" },
+                            Quantity: {editable: true, type: "int"},
+                            Id: { editable: false, type: "string" }
+                        }
+                    }
+                },
+                requestEnd: function (e) {
+                    if (e.type == "create" || e.type == "update") {
+                        this.read();
+                    }
+                },
+                error: function(e) {
+                    display_kendoui_grid_error(e);
+                    // Cancel the changes
+                    this.cancelChanges();
+                },
+                
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns:[
+
+                {
+                    title: "@T("Admin.LoyaltyReward.LoyaltyReward.Fields.Gift_Name")", 
+                    field: "Gift_Name",
+                    width: "180px",
+
+                },
+                {
+                    title: "@T("Admin.LoyaltyReward.LoyaltyReward.Fields.Quantity")",
+                    field: "Quantity"
+                },
+
+                {
+                    
+                        command: [
+                            {
+                                name: "edit",
+                                text: {
+                                    edit: "@T("Admin.Common.Edit")",
+                                    update: "@T("Admin.Common.Update")",
+                                    cancel: "@T("Admin.Common.Cancel")"
+                                }
+                            }, {
+                                name: "destroy",
+                                text: "@T("Admin.Common.Delete")"
+                            }
+                        ],
+                        width: 200,
+                        filterable: false
+                }
+            ]
+            
+        }
+
+        );
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#Gift_Name").change(function () {
+            var GiftID = $(this).children("option:selected").val();
+            console.log(GiftID);
+            var postData = {
+                GiftID: GiftID
+
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("GetQuantity", "LoyaltyReward"))",
+                data: postData,
+                success: function (data) {
+                    if (data.error != null) {
+                        alert(data.error);
+                    }
+                    console.log(data.Available_Quantity);
+                    $('#Quantity').text("Available Unit : " + data.Available_Quantity);
+                    console.log($('#@Html.FieldIdFor(model => Model.Gift_Name)').val());
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                    alert(xhr.responseJSON.Errors);
+                    $('#AddGift').attr('disabled', false);
+                }
+            });
+        });
+    });
+</script>

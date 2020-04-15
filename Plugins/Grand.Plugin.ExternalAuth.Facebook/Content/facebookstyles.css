@@ -1,0 +1,29 @@
+﻿.facebook-btn {
+    background-color: #581C7A;
+    height: 50px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    min-width: 150px;
+
+    margin-right: 70px;
+    /*display: inline-block;
+    width: 150px;
+    height: 23px;
+    background-color: red;
+    "url('Images/facebook-signing.png')" background-repeat: no-repeat;*/
+}
+/*.facebook-btn:hover {
+    background-position: 0px -24px;
+}
+.facebook-btn:active {
+    background-position: 0px -48px;
+}*/
+/*justify-content: flex-end;*/
+
+.facebook-btn a{
+    color:#FFFFFF !important;
+}

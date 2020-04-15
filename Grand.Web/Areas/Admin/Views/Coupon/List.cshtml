@@ -1,0 +1,175 @@
+﻿@using Grand.Web.Areas.Admin.Models.CouponsModule;
+
+@model CouponListModel
+@inject AdminAreaSettings adminAreaSettings
+@{
+    //page title
+    ViewBag.Title = T("Admin.Promotions.Coupons").Text;
+}
+<antiforgery-token />
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light form-fit">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-tags"></i>
+                    @T("Admin.Promotions.Coupons")
+                </div>
+                <div class="actions btn-group btn-group-devided">
+                    <a href="@Url.Action("Create")" class="btn green"><i class="fa fa-plus"></i><span class="hidden-xs"> @T("Admin.Common.AddNew") </span></a>
+                    <vc:admin-widget widget-zone="coupon_list_buttons" additional-data="null" />
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <admin-label asp-for="SearchCouponName" />
+                            <div class="col-md-4 col-sm-6">
+                                <admin-input asp-for="SearchCouponName" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <admin-label asp-for="SearchCouponCode" />
+                            <div class="col-md-4 col-sm-6">
+                                <admin-input asp-for="SearchCouponCode" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <admin-label asp-for="SearchCouponTypeId" />
+                            <div class="col-md-4 col-sm-6">
+                                <admin-select asp-for="SearchCouponTypeId" asp-items="Model.AvailableCouponTypes" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-sm-offset-3 col-md-9 col-sm-9">
+                                <button class="btn btn-success filter-submit" id="search-coupons">
+                                    <i class="fa fa-search"></i> @T("Admin.Common.Search")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="coupons-grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            $("#coupons-grid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("List", "Coupon"))",
+                            type: "POST",
+                            dataType: "json",
+                            data: additionalData
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                        errors: "Errors"
+                    },
+                    error: function(e) {
+                        display_kendoui_grid_error(e);
+                        // Cancel the changes
+                        this.cancelChanges();
+                    },
+                    pageSize: @(adminAreaSettings.DefaultGridPageSize),
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                pageable: {
+                    refresh: true,
+                    pageSizes: [@(adminAreaSettings.GridPageSizes)]
+                },
+                editable: {
+                    confirmation: false,
+                    mode: "inline"
+                },
+                scrollable: false,
+                columns: [{
+                    field: "Name",
+                    title: "@T("Admin.Promotions.Coupons.Fields.Name")",
+                    width: 350,
+                    template: '<a class="k-link" href="Edit/#=Id#">#=Name#</a>',
+                }, {
+                    field: "CouponTypeName",
+                    title: "@T("Admin.Promotions.Coupons.Fields.CouponType")",
+                    width: 250
+                },{
+                    field: "CouponAmount",
+                    title: "@T("Admin.Promotions.Coupons.Fields.Coupon")",
+                    width: 200,
+                        template: '# if(!CalculateByPlugin) { if(UsePercentage) {# #=CouponPercentage# % #} else {#  #=CouponAmount# #=PrimaryStoreCurrencyCode# #} } # '
+                }, {
+                    field: "StartDate",
+                    title: "@T("Admin.Promotions.Coupons.Fields.StartDate")",
+                    width: 200,
+                    type: "date",
+                    format: "{0:G}"
+                }, {
+                    field: "EndDate",
+                    title: "@T("Admin.Promotions.Coupons.Fields.EndDate")",
+                    width: 200,
+                    type: "date",
+                    format: "{0:G}"
+                }, {
+                    field: "TimesUsed",
+                    title: "@T("Admin.Promotions.Coupons.Fields.TimesUsed")",
+                    width: 200
+                }, {
+                    field: "IsEnabled",
+                    title: "@T("Admin.Promotions.Coupons.Fields.IsEnabled")",
+                    width: 100,
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: '# if(IsEnabled) {# <i class="fa fa-check" aria-hidden="true" style="color:green"></i> #} else {# <i class="fa fa-times" aria-hidden="true" style="color:red"></i> #} #'
+                }]
+            });
+        });
+</script>
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#search-coupons').click(function () {
+                var grid = $('#coupons-grid').data('kendoGrid');
+                grid.dataSource.page(1); //new search. Set page size to 1
+                //grid.dataSource.read(); we already loaded the grid above using "page" function
+                return false;
+            });
+        });
+
+        $("#@Html.FieldIdFor(model => model.SearchCouponName)").keydown(function (event) {
+            if (event.keyCode == 13) {
+                $("#search-coupons").click();
+                return false;
+            }
+        });
+
+        $("#@Html.FieldIdFor(model => model.SearchCouponCode)").keydown(function (event) {
+            if (event.keyCode == 13) {
+                $("#search-coupons").click();
+                return false;
+            }
+        });
+
+        function additionalData() {
+            var data = {
+                SearchCouponTypeId: $('#@Html.FieldIdFor(model => model.SearchCouponTypeId)').val(),
+                SearchCouponCouponCode: $('#@Html.FieldIdFor(model => model.SearchCouponCode)').val(),
+                SearchCouponName: $('#@Html.FieldIdFor(model => model.SearchCouponName)').val()
+            };
+            addAntiForgeryToken(data);
+            return data;
+        }
+
+</script>

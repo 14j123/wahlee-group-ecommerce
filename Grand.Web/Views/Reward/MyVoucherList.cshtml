@@ -1,0 +1,130 @@
+﻿<head>
+    <title>My Vouchers</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<div class="container">
+    <div class="row">
+        <div class="card col-10 h-10 totalpoint">Rewards</div>
+        <div class="card col-2 h-10">My Vouchers</div>
+    </div>
+    <div class="row h-5"></div>
+    <div class="row">
+        <div class="container col-2">
+            @Html.Partial("SideBar")
+        </div>
+
+        <div class="container col-10 ">
+
+            <ul class="nav nav-tabs nav-fill" id="tab">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/Reward/MyVoucherList">Vouchers Purchased</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Reward/MyVoucherListExpired">Expired</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Reward/MyVoucherListRedeemed">Redeemed</a>
+                </li>
+
+            </ul>
+
+            <div class="tab-content" id="tabcontent">
+                <div class="card-header tab-pane container active bg-light" id="RedeemVoucher">
+
+                </div>
+                <div class="card-header tab-pane container fade" id="Expired">
+                    111
+                </div>
+                <div class="card-header tab-pane container fade" id="Redeemed">
+                    222
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-group" id="group" style="display:none">
+
+    <div class="card col-sm-2 h-10" id="pic">
+
+        <img src="http://localhost:16592/content/images/thumbs/5cb0732d05ff030f8ce6ca5a.jpeg" class="card-img img-responsive center-block">
+
+    </div>
+    <div class="card col-sm-7 h-10" id="context">
+
+        <h5 id="title" class="card-text RewardName"></h5>
+        
+        <p class="card-text"><small class="text-muted test">Last updated 3 mins ago</small></p>
+
+    </div>
+    <div class="card col-sm-2 text-center h-10 point" id="point">
+        <input type="hidden" class="hidden" id="Id" value="" />
+        <a class="btn btn-primary hidden" id="Redeem" >Redeem</a> @*@T("Admin.Common.Edit")*@
+
+    </div>
+    <div class="card col-sm-1 h-10" id="redirect">
+
+        <a href="#" class="next round">&#8250;</a>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $('#myTab a').on('click', function (e) {
+        console.log("hi");
+    })
+    //Expired
+    //Redeemed
+    //function activaTab(tab) {
+    //    console.log(tab);
+    //};
+
+</script>
+
+<script>
+    
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url: "@(Url.Action("MyVoucherList", "Reward"))",
+
+        success: function (data) {
+            if (data.error != null) {
+                alert(data.error);
+            }
+
+            console.log(data);
+            $.each(data, function (i, a) {
+                if (a.StartTime < new Date() && a.ExpiredTime > new Date()) {
+                    var re = $("#group").clone();
+                    re.find(".RewardName").text(a.Reward_Name);
+                    re.find("input.hidden").attr("value", a.Id);
+                    re.find("#Redeem").attr("href", "RedeemVoucher/" + a.Id);
+                    $("#RedeemVoucher").append(re.show());
+                } else {
+                    console.log(a.StartTime)
+                    var re = $("#group").clone();
+                    re.find(".RewardName").text(a.Reward_Name);
+                    re.find("input.hidden").attr("value", a.Id);
+                    re.find("#Redeem").attr("href", "RedeemVoucher/" + a.Id);
+                    $("#RedeemVoucher").append(re.show());
+                }
+                
+            });
+        },
+        error: function (xhr) {
+            console.log(xhr);
+            alert(xhr.responseJSON.Errors);
+        }
+        });
+    
+</script>

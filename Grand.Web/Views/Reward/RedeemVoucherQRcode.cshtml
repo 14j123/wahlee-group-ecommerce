@@ -1,0 +1,69 @@
+﻿@model Grand.Web.Areas.Admin.Models.RewardSummary.RewardSummaryModel
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/qrcode.js"></script>
+
+</head>
+
+<div class="container">
+    <div class="row">
+        <div class="card col-10 h-10 totalpoint">Rewards</div>
+        <div class="card col-2 h-10">My Vouchers</div>
+    </div>
+    <div class="row h-5"></div>
+    <div class="row">
+        <div class="container col-2">
+            @Html.Partial("SideBar")
+        </div>
+
+        <div class="container col-10">
+            <div class="card text-center">
+                <p>Scan QR Code To Redeem</p>
+
+                <div class="container col-12">
+                    <div class="row justify-content-center">
+                        <div class="card col-6 ">
+                            <img src=@Model.Url class="card-img img-responsive center-block">
+
+                            <p class="card-text">@Model.Reward_Name</p>
+
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="card col-6">
+                            <div id="qrcode"></div>
+
+                        </div>
+                    </div>
+
+                    <p>Cancel</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var qrcode = new QRCode("qrcode", {
+        text: "http://localhost:16592/Reward/RedeemVoucherQRcode/"+ @Model.Id,
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    function makeCode() {
+        qrcode.makeCode(elText.value);
+    }
+
+    makeCode();
+
+</script>

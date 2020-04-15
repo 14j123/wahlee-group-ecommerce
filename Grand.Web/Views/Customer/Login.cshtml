@@ -1,0 +1,244 @@
+﻿@model LoginModel
+@using System.Net
+
+    @*@model RegisterModel
+    @using System.Text.Encodings.Web*@
+
+
+
+@inject IWebHelper webHelper
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Login").Text);
+
+    //register URL with return URL (if specified)
+    var registerUrl = Url.RouteUrl("Register", new { returnUrl = this.Context.Request.Query["returnUrl"] });
+}
+<div class="row justify-content-center">
+
+<div class="col-8 page login-page">
+    @*<h2 class="generalTitle">@T("Account.Login.Welcome")</h2>*@
+    <partial name="_ExternalAuthentication.Errors" />
+    @*<div class="col-4"></div>*@
+    <div class="mb-2" >
+
+            <ul class="nav nav-tabs border-0 nav-justified" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link  hiddentransparent newtabfont" href="#newcustab" role="tab" data-toggle="tab" onclick="location.href='@registerUrl'" value="@T("Account.Register")">New Customer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active labelfontcolor newtabfont" href="#returncustab" role="tab" data-toggle="tab">Returning Customer</a>
+                </li>
+
+            </ul>
+
+
+
+            <div class="tab-content">
+                @*whitebackground justify-content-center*@
+                <div class="tab-pane" id="newcustab">
+
+
+
+                    @*<div class="form-group row">
+                <div class="col-lg-3 col-12">
+                    <label asp-for="Email" class="col-form-label">@T("Account.Login.Fields.Email"):</label>
+                </div>
+                <div class="col-lg-9 col-12">
+                    <input asp-for="Email" class="form-control form-rounded email" autofocus="autofocus" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-3 col-12">
+                    <label asp-for="Username" class="col-form-label">@T("Account.Login.Fields.UserName"):</label>
+                </div>
+                <div class="col-lg-9 col-12">
+                    <input asp-for="Username" class="form-control form-rounded username" autofocus="autofocus" />
+                    <span asp-validation-for="Username"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-3 col-12">
+                    <label asp-for="Password" class="col-form-label">@T("Account.Login.Fields.Password"):</label>
+                </div>
+                <div class="col-lg-9 col-12">
+                    <input asp-for="Password" class="form-control form-rounded password" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+            </div>*@
+
+
+
+                </div>
+
+                <div class="content-pane active" id="returncustab">
+
+                    <div class="whitebackground">
+                        @*style="height:40%; width:40%"*@
+
+                        <form asp-route="Login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
+
+                            <div class="card mb-3">
+
+
+                                <div class="row continue justify-content-center">Continue with</div>
+
+
+
+                                <div class="row justify-content-center external-authentication">
+                                    @await Component.InvokeAsync("ExternalMethods")
+                                </div>
+                                <div class="labelfontcolor aftercontinue row justify-content-center">
+                                    we will never post on
+                                </div>
+
+                                <div class="labelfontcolor aftercontinuetext row justify-content-center">
+                                    your behalf or share any information without your permission
+                                </div>
+
+
+                                <div class="purpleunderline"></div>
+
+
+
+
+                                <div class="row continue justify-content-center">Or</div>
+
+
+                                <div class="row justify-content-center">
+                                    <div asp-validation-summary="ModelOnly" class="message-error">@T("Account.Login.Unsuccessful")</div>
+                                    <div class="col-12 form-group mb-0">
+                                        @if (Model.UsernamesEnabled)
+                                        {
+                                            <div class="form-group col-md-12">
+                                                <div class="row justify-content-center">
+                                                    <label asp-for="Username" class="col-form-label  labelfontcolor col-6 my-auto">@T("Account.Login.Fields.UserName"):</label>
+
+
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                    <div class="col-lg-12 col-12">
+                                                        <input asp-for="Username" class="form-control col-6 newinput" autofocus="autofocus" />
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                    <div class="col-12">
+                                                        <span asp-validation-for="Username" class="col-6 my-auto"></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group col-md-12">
+                                                <div class="row justify-content-center">
+                                                    <label asp-for="Email" class="col-form-label   labelfontcolor  col-6 my-auto">@T("Account.Login.Fields.Email"):</label>
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                    <input asp-for="Email" class="form-control email newinput col-6" autofocus="autofocus" />
+                                                </div>
+
+                                                <div class="row justify-content-center">
+                                                    <span asp-validation-for="Email" class="col-6 my-auto"></span>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="form-group col-md-12">
+                                            <div class="row justify-content-center">
+                                                <label asp-for="Password" class="col-form-label labelfontcolor col-6 my-auto">@T("Account.Login.Fields.Password"):</label>
+                                            </div>
+                                            <div class="row justify-content-center">
+                                                <input asp-for="Password" class="form-control password col-6 newinput" />
+                                            </div>
+                                            <div class="row justify-content-center">
+                                                <span asp-validation-for="Password" class="col-6 my-auto"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <div class="row justify-content-center">
+                                                <div class=" col-6 inputs d-flex flex-row">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input" asp-for="RememberMe" />
+                                                        <input class="custom-control-label" name="RememberMe" type="hidden" value="false">
+                                                        <span class="custom-control-label"></span>
+                                                        <span class="custom-control-description">@T("Account.Login.Fields.RememberMe")</span>
+                                                    </label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <div class="row justify-content-center">
+                                                <span class="ml-3 forgot-password">
+                                                    <a asp-route="PasswordRecovery">@T("Account.Login.ForgotPassword")</a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        @if (Model.DisplayCaptcha)
+                                        {
+                                            <div class="captcha-box">
+                                                <captcha />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row justify-content-center">
+
+                                        <input class="btn PayButton col-6" type="submit" value="@T("Account.Login.LoginButton")" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </form>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            @await Component.InvokeAsync("TopicBlock", new { systemName = "LoginRegistrationInfo" })
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+    </div>
+    @*<div class="col-4"></div>*@
+        @*<div class="row">
+            <div class="col-12 mb-2">
+                @await Component.InvokeAsync("TopicBlock", new { systemName = "LoginRegistrationInfo" })
+            </div>
+        </div>*@
+    </div>
+ </div>
+

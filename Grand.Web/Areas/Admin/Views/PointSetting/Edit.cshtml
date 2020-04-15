@@ -1,0 +1,35 @@
+﻿@model Grand.Web.Areas.Admin.Models.PointSetting.PointSettingModel
+
+@{
+    //page title Admin.Customers.CustomerRoles.EditCustomerRoleDetails
+    ViewBag.Title = T("Admin.PointSetting.PointSetting.Fields.Group_Name").Text;
+}
+<form asp-controller="PointSetting" asp-action="Edit" method="post" id="luckydrawg1-form">
+    <antiforgery-token />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light form-fit">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-users"></i>
+                        @T("Admin.PointSetting.PointSetting.Fields.Group_Name") - @Model.RuleName
+                        <small><i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T("Admin.PointSetting.PointSetting.Fields.BackToList").Text, "List")</small>
+                    </div>
+                    <div class="actions util-btn-margin-bottom-5">
+                        <button class="btn btn-success" type="submit" name="save"><i class="fa fa-check"></i> @T("Admin.Common.Save") </button>
+                        <button class="btn btn-success" type="submit" name="save-continue"><i class="fa fa-check-circle"></i> @T("Admin.Common.SaveContinue") </button>
+                        @if(Model.Id != "5cdd22ceaa52c33ad0f5626c" && Model.Id != "5cdd22d8aa52c33ad0f562b8")
+                        {
+                            <span id="btn-delete" class="btn red"><i class="fa fa-trash-o"></i> @T("Admin.Common.Delete")</span>
+                        }
+                        <vc:admin-widget widget-zone="luckydrawgrouping_details_buttons" additional-data="Model" />
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <partial name="_Update" model="Model" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@Html.DeleteConfirmation("luckydrawgrouping-delete")

@@ -1,0 +1,62 @@
+﻿@using Grand.Framework.UI
+@{
+    Layout = "";
+    Html.AddCssFileParts("~/Plugins/ExternalAuth.Facebook/Content/facebookstyles.css");
+}
+
+
+
+
+
+@*<div class="FGButton" href="@Url.Action("Login", "FacebookAuthentication", new { ReturnUrl = Context.Request.Query["ReturnUrl"].ToString()})">
+        Facebook
+
+        <a href="@Url.Action("Login", "FacebookAuthentication", new { ReturnUrl = Context.Request.Query["ReturnUrl"].ToString()})"> </a>
+
+    </div>*@
+
+
+@*<div class="FGButton" onclick="@Url.Action("Login", "FacebookAuthentication", new { ReturnUrl = Context.Request.Query["ReturnUrl"].ToString()})">
+        <i class="fa fa-plus"></i>
+        <div>
+          Facebook
+        </div>
+    </div>*@
+
+
+@*  *@
+
+
+@*<div class="facebook-login-block">
+        <div class="buttons">
+            <a href="@Url.Action("Login", "FacebookAuthentication", new { ReturnUrl = Context.Request.Query["ReturnUrl"].ToString()})" class="facebook-btn"></a>
+        </div>
+    </div>*@
+
+
+
+
+
+<div>
+
+    <a href="@Url.Action("Login", "FacebookAuthentication", new { ReturnUrl = Context.Request.Query["ReturnUrl"].ToString()})" class="facebook-btn"> 
+    
+        <img style="
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background-size: 100%;
+    margin-right: 10px;
+    margin-left: 8px;
+    background-image:url(/Themes/DefaultClean/Content/images/socialfb.png);
+">
+
+    
+    Facebook</a>
+
+</div>
+
+
+
+
+

@@ -1,0 +1,16 @@
+﻿@model IList<ProductOverviewModel>
+@if (Model.Any())
+{
+<div class="product-grid bestsellers mostpurchase">
+    <h2 class="generalTitle text-left">Most Purchase Item</h2>@*@T("Bestsellers")*@
+    <h2 class="generalTitle text-right">show more</h2>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-xl-2 col-lg-2 col-sm-6 col-6 product-container">
+                <partial name="_ProductBox" model="item" />
+            </div>
+        }
+    </div>
+</div>
+}

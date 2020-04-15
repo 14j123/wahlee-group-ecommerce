@@ -1,0 +1,19 @@
+﻿@using Grand.Web.Models.Coupons;
+@using Grand.Services.Common;
+
+@model IList<CouponModel>
+<div class="col-12 px-0 home-page-polls">
+
+    @if (Model.Count > 0)
+    {
+        <h2 class="generalTitle text-center">Coupon</h2>
+    }
+
+    @foreach (var coupon in Model)
+    {
+
+        <partial name="_Coupon" model="coupon" />
+    }
+
+</div>
+

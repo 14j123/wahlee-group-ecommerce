@@ -1,0 +1,408 @@
+﻿@model RegisterModel
+@using System.Text.Encodings.Web
+
+@{
+    Layout = "_ColumnsOne";
+    //title
+    Html.AddTitleParts(T("PageTitle.Register").Text);
+
+
+
+
+
+    //continue URL
+    var qs = this.Context.Request.Query["ReturnUrl"];
+    var continueUrl = "";
+    if (!String.IsNullOrEmpty(qs) && Url.IsLocalUrl(qs))
+    {
+        continueUrl = qs;
+    }
+    else
+    {
+        continueUrl = Url.RouteUrl("HomePage");
+    }
+
+
+    var loginUrl = Url.RouteUrl("Login", new { returnUrl = this.Context.Request.Query["returnUrl"] });
+}
+@if (Model.CountryEnabled && Model.StateProvinceEnabled)
+{
+    <script asp-location="Footer">
+        $(function () {
+            $("#@Html.IdFor(model => model.CountryId)").change(function () {
+                var selectedItem = $(this).val();
+                var ddlStates = $("#@Html.IdFor(model => model.StateProvinceId)");
+                var statesProgress = $("#states-loading-progress");
+                statesProgress.show();
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl("GetStatesByCountryId"))",
+                    data: { "countryId": selectedItem, "addSelectStateItem": "true" },
+                    success: function (data) {
+                        ddlStates.html('');
+                        $.each(data, function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                        statesProgress.hide();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Failed to retrieve states.');
+                        statesProgress.hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<script asp-location="Footer">
+    $(function () {
+        $("#@Html.IdFor(model => model.Newsletter)").click(toggleNewsletterCat);
+        toggleNewsletterCat();
+
+        function toggleNewsletterCat() {
+            if ($('#@Html.FieldIdFor(model => model.Newsletter)').is(':checked')) {
+                $('.register-category-newsletter').show();
+            }
+            else {
+                $('.register-category-newsletter').hide();
+            }
+        }
+    });
+</script>
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form asp-route="Register" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
+            <div class="page registration-page">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+
+
+                <ul class="nav nav-tabs nav-justified justify-content-center border-0 heighttab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link active labelfontcolor newtabfont" href="#newcustab" role="tab" data-toggle="tab">New Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link hiddentransparent newtabfont" role="tab" data-toggle="tab" onclick="location.href='@loginUrl'">Returning Customer</a>
+                    </li>
+
+                </ul>
+
+
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="newcustab">
+
+
+
+
+
+
+
+
+                        <div class="card mb-3">
+                            @*style="text-align:center;"*@
+                            @*<h3 class="h4 card-header">@T("Account.YourPersonalDetails")</h3>*@
+
+
+
+
+
+                            <div class="row continue justify-content-center">Continue with</div>
+
+
+
+                            <div class="row justify-content-center external-authentication">
+                                @await Component.InvokeAsync("ExternalMethods")
+                            </div>
+                            <div class="labelfontcolor aftercontinue row justify-content-center">
+                                we will never post on
+                            </div>
+
+                            <div class="labelfontcolor aftercontinuetext row justify-content-center">
+                                your behalf or share any information without your permission
+                            </div>
+
+
+                            <div class="purpleunderline"></div>
+
+
+
+
+                            <div class="row continue justify-content-center">Or</div>
+
+
+                            <div class="row justify-content-center">
+                                <fieldset class="form-group col-md-12 mail">
+                                    <legend class="sr-only">@T("account.fields.email")</legend>
+                                    <div class="row justify-content-center">
+                                        @*align-items-center*@
+                                        <label asp-for="Email" class="col-form-label labelfontcolor  col-5 my-auto">@T("Account.Fields.Email"):</label>
+
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <input asp-for="Email" class="form-control  col-5 newinput" />
+                                    </div>
+                                    <div class="row justify-content-center">
+
+                                        <span asp-validation-for="Email" class="col-5"></span>
+                                    </div>
+                                </fieldset>
+
+
+
+
+                                <div class="form-group col-md-12">
+                                    <div class="row justify-content-center">
+
+                                        <label asp-for="Password" class="col-form-label labelfontcolor col-5 my-auto">@T("Account.Fields.Password"):</label>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <input asp-for="Password" class="form-control col-5 newinput" />
+
+                                    </div>
+
+                                    <div class="row justify-content-center">
+
+                                        <span asp-validation-for="Password" class="col-5"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="row justify-content-center">
+                                        <label asp-for="ConfirmPassword" class="col-form-label  labelfontcolor  col-5 my-auto">@T("Account.Fields.ConfirmPassword"):</label>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <input asp-for="ConfirmPassword" class="form-control col-5 newinput" />
+
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span asp-validation-for="ConfirmPassword" class="col-5"></span>
+                                    </div>
+                                </div>
+
+
+                                @if (Model.GenderEnabled)
+                                {
+
+                                    <div class="formgroup col-md-12">
+
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-5 col-5 my-auto labelfontcolor col-form-label">
+                                                <span>@T("Account.Fields.Gender"):</span>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <fieldset class="gender px-3 col-12">
+                                                <legend class="sr-only">@T("Account.Fields.Gender")</legend>
+                                                <div class="d-flex row justify-content-center col-12">
+                                                    <label class="male custom-control custom-radio col-2 labelfontcolor">
+                                                        <input id="gender-male" name="Gender" type="radio" value="M" checked="@(Model.Gender == "M")" class="custom-control-input">
+                                                        <span class="custom-control-label"></span>
+                                                        <span class="forcheckbox custom-control-description">@T("Account.Fields.Gender.Male")</span>
+                                                    </label>
+                                                    <label class="female custom-control custom-radio col-2 labelfontcolor">
+                                                        <input id="gender-female" name="Gender" type="radio" value="F" checked="@(Model.Gender == "F")" class="custom-control-input">
+                                                        <span class="custom-control-label"></span>
+                                                        <span class="forcheckbox custom-control-description">@T("Account.Fields.Gender.Female")</span>
+                                                    </label>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                    </div>
+                                }
+                                <div class="form-group col-md-12">
+
+                                    <fieldset class="col-sm-12 col-12 form-group">
+                                        <legend class="sr-only">@T("account.fields.firstname")</legend>
+
+                                        <div class="row justify-content-center">
+                                            <label asp-for="FirstName" class="col-form-label  labelfontcolor col-5 my-auto">@T("Account.Fields.FirstName"):</label>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <input asp-for="FirstName" class="form-control col-5 newinput" />
+
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <span asp-validation-for="FirstName" class="col-5"></span>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="col-sm-12 col-12 form-group">
+                                        <div class="row justify-content-center">
+                                            <legend class="sr-only">@T("account.fields.lastname")</legend>
+                                            <label asp-for="LastName" class="col-form-label  labelfontcolor col-5 my-auto">@T("Account.Fields.LastName"):</label>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <input asp-for="LastName" class="form-control col-5 newinput" />
+
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <span asp-validation-for="LastName" class="col-5"></span>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+
+
+
+
+                                @if (Model.DateOfBirthEnabled)
+                                {
+
+
+
+                                    <fieldset class="form-group date-of-birth col-sm-12 col-12">
+
+                                        <legend class="sr-only">@T("Account.Fields.DateOfBirth")</legend>
+                                        <div class="row justify-content-center">
+                                            <span class="col-form-label col-5  my-auto  labelfontcolor">@T("Account.Fields.DateOfBirth"):</span>@*py-0 px-0*@
+                                        </div>
+                                        <div class="row row-centered">
+                                            <div>
+
+                                                @Html.DatePickerDropDowns(Html.NameFor(x => x.DateOfBirthDay),
+                                                            Html.NameFor(x => x.DateOfBirthMonth),
+                                                            Html.NameFor(x => x.DateOfBirthYear),
+                                                            DateTime.Now.Year - 110,
+                                                            DateTime.Now.Year,
+                                                            Model.DateOfBirthDay,
+                                                            Model.DateOfBirthMonth,
+                                                            Model.DateOfBirthYear,
+                                                            false,
+                                                            new { @class = "col-3 newselect col-centered" })
+                                            </div>
+                                            <div class="row">
+                                                <span asp-validation-for="DateOfBirthDay"></span>
+                                                <span asp-validation-for="DateOfBirthMonth"></span>
+                                                <span asp-validation-for="DateOfBirthYear"></span>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+
+
+
+
+                                }
+
+
+                                @if (Model.UsernamesEnabled)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <label asp-for="Username" class="col-form-label    labelfontcolor">@T("Account.Fields.Username"):</label>
+                                        </div>
+                                        <div class="col-12">
+                                            <input asp-for="Username" class="form-control" />
+                                            <span asp-validation-for="Username"></span>
+                                            @if (Model.CheckUsernameAvailabilityEnabled)
+                                            {
+                                                <partial name="_CheckUsernameAvailability" />
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+
+
+
+
+
+
+                                <div class="form-group col-md-12">
+                                    <div class="row justify-content-center">
+                                        <label for="Newsletter" class="ml-1 custom-control custom-checkbox  col-5 my-auto">
+                                            <input class="custom-control-input" asp-for="Newsletter" />
+                                            <span class="custom-control-label"></span>
+                                            <span class="custom-control-description">keep me sign in </span>
+                                            <span class="sr-only">keep me sign in</span>
+                                        </label>
+                                        <span asp-validation-for="Newsletter"></span>
+                                    </div>
+                                </div>
+                                <partial name="_NewsLetterCategories" model="Model.NewsletterCategories" />
+
+                                <div class="form-group col-md-12">
+                                    <div class="row justify-content-center">
+                                        <label for="Newsletter" class="ml-1 custom-control custom-checkbox my-auto col-5">
+                                            <input class="custom-control-input" asp-for="Newsletter" />
+                                            <span class="custom-control-label"></span>
+                                            <span class="custom-control-description">@*@T("account.fields.newsletter")*@Send me exclusive newsletter and offers from WAHLEE</span>
+                                            <span class="sr-only">@*@T("account.fields.newsletter")*@Send me exclusive newsletter and offers from WAHLEE</span>
+                                        </label>
+                                        <span asp-validation-for="Newsletter"></span>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="form-group col-md-12">
+
+                                    <div class="row justify-content-center">
+                                        <input type="submit" id="register-button" class="btn PayButton col-5" value="@T("Account.Register.Button")" name="register-button" /> @*data-toggle="modal" data-target="#RegisterModal" onclick="location.href='@continueUrl'"*@
+
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                                <div class="modal fade" id="RegisterModal">
+                                    <div class="modal-dialog modal-dialog-centered col-8">
+                                        <div class="modal-content purplewindow">
+
+                                            <!-- Modal Header -->
+                                            <!-- Modal body -->
+                                            <div class="modal-body ">
+                                                <div class="windowtextcenter text-white">
+                                                    <h10>An activation email has been send to you</h10>
+
+                                                    <h10>Activate to enjoy shopping without any haste</h10>
+                                                </div>
+                                            </div>
+
+                                            <!-- Modal footer -->
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <div class="tab-pane" id="returncustab"></div>
+
+                    </div>
+
+
+
+
+                    @*name="register-button" data-toggle="modal" data-target="#RegisterModal" onclick="location.href='@continueUrl'"*@
+
+
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+

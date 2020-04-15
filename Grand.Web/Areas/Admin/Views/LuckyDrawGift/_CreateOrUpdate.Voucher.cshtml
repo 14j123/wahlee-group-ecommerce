@@ -1,0 +1,141 @@
+﻿@model Grand.Web.Areas.Admin.Models.LuckyDrawGift.LuckyDrawGiftModel
+
+<div class="panel panel-default">
+    @if (String.IsNullOrEmpty(Model.Id))
+    {
+        <div class="note note-info">
+            @T("Admin.Configuration.Gift.Resources.SaveBeforeEdit")
+        </div>
+    }
+    else
+    {
+        <div class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group">
+                    <admin-label asp-for="Gift_Name" />
+                    <div class="col-md-9 col-sm-9">
+                        <admin-input asp-for="Gift_Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button type="button" id="search-resources" class="btn btn-primary btn-search">
+                            <i class="fa fa-search"></i>
+                            @T("Admin.Common.Search")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="resources-grid"></div>
+        </div>
+    }
+</div>
+        
+<script>
+    $(document).ready(function (){
+        $("#resources-grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("Resources", "LuckyDrawGift", new { Id = Model.Id, Gift_Name = Model.Gift_Name}))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                    create: {
+                        url: "@Html.Raw(Url.Action("ResourceAdd", "LuckyDrawGift", new { Gift_Type_ID = Model.Id, Gift_Name = Model.Gift_Name, Gift_Description = Model.Gift_Description, VoucherCategory = Model.VoucherCategory}))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                    update: {
+                        url: "@Html.Raw(Url.Action("ResourceUpdate", "LuckyDrawGift", new { Id = Model.Id }))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                    destroy: {
+                        url: "@Html.Raw(Url.Action("ResourceDelete", "LuckyDrawGift"))",
+                        type: "POST",
+                        dataType: "json",
+                        data: addAntiForgeryToken
+                    },
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        id: "Id",
+                        fields: {
+                            GiftName: { editable: true, type: "string" },
+
+                            Id: { editable: false, type: "string" }
+                        }
+                    }
+                },
+                requestEnd: function (e) {
+                    if (e.type == "create" || e.type == "update") {
+                        this.read();
+                    }
+                },
+                error: function(e) {
+                    display_kendoui_grid_error(e);
+                    // Cancel the changes
+                    this.cancelChanges();
+                },
+                
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            toolbar: [{ name: "create", text: "@T("Admin.Common.AddNewRecord")" }],
+                        editable: {
+                        confirmation: false,
+                        mode: "inline"
+            },
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns:[
+                {
+                    title: "@T("Admin.LuckyDrawGiftID.LuckyDrawGiftID.Fields.VoucherNumber")",
+                    field: "VoucherNumber"
+                },
+                {
+                    
+                        command: [
+                            {
+                                name: "edit",
+                                text: {
+                                    edit: "@T("Admin.Common.Edit")",
+                                    update: "@T("Admin.Common.Update")",
+                                    cancel: "@T("Admin.Common.Cancel")"
+                                }
+                            }, {
+                                name: "destroy",
+                                text: "@T("Admin.Common.Delete")"
+                            }
+                        ],
+                        width: 200,
+                        filterable: false
+                }
+            ]
+            
+        }
+
+        );
+    });
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,141 @@
+﻿@model Grand.Web.Areas.Admin.Models.LuckyDrawGift.LuckyDrawGiftModel
+<div class="form-horizontal">
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Gift_Name" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Gift_Name" />
+                <span asp-validation-for="Gift_Name"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <admin-label asp-for="Gift_Description" />
+            <div class="col-md-9 col-sm-9">
+                <admin-textarea asp-for="Gift_Description"></admin-textarea>
+
+                <span asp-validation-for="Gift_Description"></span>
+            </div>
+        </div>
+        <div class="form-group" id="voucherCategory">
+            <admin-label asp-for="VoucherCategory" />
+            <div class="col-md-9 col-sm-9">
+                <admin-select asp-for="VoucherCategory" asp-items="Model.selectedList" />
+                <span asp-validation-for="VoucherCategory"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-horizontal">
+    <div class="form-group" id="Quantity3">
+        <admin-label asp-for="Quantity" />
+        <div class="col-md-9 col-sm-9" id="Quantity4">
+            <admin-input asp-for="Quantity" />
+            <span asp-validation-for="Quantity"></span>
+        </div>
+    </div>
+    <div class="form-body">
+        <div class="form-group">
+            <admin-label asp-for="Activate" />
+            <div class="col-md-9 col-sm-9">
+                <admin-input asp-for="Activate" />
+                <span asp-validation-for="Activate"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#VoucherCategory").change(function () {
+            var op = $(this).children("option:selected").val();
+            if (op == 1) {
+                
+                $("#vouchertab").hide();
+                //$("#Quantity1").show();
+                $("#Quantity2").show();
+                $("#Quantity3").show();
+                $("#Quantity4").show();
+            }
+            if (op == 2) {
+                $("#vouchertab").show();
+                $("#Quantity2").hide();
+                $("#Quantity3").hide();
+                $("#Quantity4").hide();
+            }
+            if (op == 3) {
+                $("#vouchertab").hide();
+                $("#Quantity2").show();
+                $("#Quantity3").show();
+                $("#Quantity4").show();
+            }
+        });
+        var op = $("#VoucherCategory").val();
+
+        if (op == 1) {
+
+            $("#vouchertab").hide();
+            
+            $("#Quantity2").show();
+            $("#Quantity3").show();
+            $("#Quantity4").show();
+        }
+        if (op == 2) {
+            $("#vouchertab").show();
+            $("#Quantity2").hide();
+            $("#Quantity3").hide();
+            $("#Quantity4").hide();
+        }
+        if (op == 3) {
+            $("#vouchertab").hide();
+            $("#Quantity2").show();
+            $("#Quantity3").show();
+            $("#Quantity4").show();
+        }
+
+    });
+
+    function Autoin(obj) {
+
+        if ($(obj).prop("checked")) {
+
+            $("#vouchertab").show();
+            //$("#Quantity1").hide();
+            $("#Quantity2").hide();
+            $("#Quantity3").hide();
+            $("#Quantity4").hide();
+
+        } else {
+
+            $("#vouchertab").hide();
+            //$("#Quantity1").show();
+            $("#Quantity2").show();
+            $("#Quantity3").show();
+            $("#Quantity4").show();
+
+        }
+        console.log($(obj).prop("checked"));
+    }
+
+    function VC(obj) {
+
+        if ($(obj).prop("checked")) {
+
+            $("#vouchertab").show();
+            //$("#Quantity1").hide();
+            $("#Quantity2").hide();
+            $("#Quantity3").hide();
+            $("#Quantity4").hide();
+
+        } else {
+
+            $("#vouchertab").hide();
+            //$("#Quantity1").show();
+            $("#Quantity2").show();
+            $("#Quantity3").show();
+            $("#Quantity4").show();
+
+        }
+        console.log($(obj).prop("checked"));
+    }
+</script>
